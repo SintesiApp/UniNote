@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UniNote — Unisci i tuoi backup JW Library</title>
+  <meta name="description" content="UniNote unisce i backup .jwlibrary da tutti i tuoi dispositivi in un unico file. Privato, offline, gratuito.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%230EA5E9'/><text x='50%' y='54%' dominant-baseline='middle' text-anchor='middle' font-size='18' fill='white'>U</text></svg>">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+  <style>
+    :root {
+      --blue:   #0EA5E9;
+      --blue-d: #0284C7;
+      --navy:   #0C4A6E;
+      --night:  #0F172A;
+      --ice:    #F0F9FF;
+      --mist:   #E0F2FE;
+      --border: #BAE6FD;
+      --text:   #0C4A6E;
+      --muted:  #64748B;
+      --white:  #FFFFFF;
+      --radius: 12px;
+      --shadow: 0 1px 3px rgba(12,74,110,.08), 0 4px 16px rgba(12,74,110,.06);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--white);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    img, svg { display: block; }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; font: inherit; }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp   { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes slideL   { from { opacity:0; transform:translateX(-28px); } to { opacity:1; transform:translateX(0); } }
+    @keyframes slideR   { from { opacity:0; transform:translateX(28px); } to { opacity:1; transform:translateX(0); } }
+    @keyframes barGrow  { from { width:0; } to { width:var(--w); } }
+    @keyframes float    { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-7px); } }
+    @keyframes underlineIn { from { transform:scaleX(0); } to { transform:scaleX(1); } }
+    @keyframes popIn    { from { opacity:0; transform:scale(.9); } to { opacity:1; transform:scale(1); } }
+    @keyframes pulse    { 0%,100% { opacity:1; } 50% { opacity:.45; } }
+    @keyframes spinOnce { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
+
+    .reveal { opacity:0; transform:translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+    .reveal-l { opacity:0; transform:translateX(-28px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal-l.visible { opacity:1; transform:translateX(0); }
+    .reveal-r { opacity:0; transform:translateX(28px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal-r.visible { opacity:1; transform:translateX(0); }
+
+    /* ─── LAYOUT ─── */
+    .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+    /* ─── NAV ─── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 60px;
+    }
+    .logo {
+      display: flex; align-items: center; gap: 9px;
+      font-size: 17px; font-weight: 600; color: var(--navy);
+    }
+    .logo-icon {
+      width: 34px; height: 34px; border-radius: 9px;
+      background: var(--blue); color: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 700;
+    }
+    .logo-badge {
+      font-size: 10px; font-weight: 500; padding: 2px 7px;
+      border-radius: 999px; background: var(--mist); color: var(--blue-d);
+    }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links a {
+      font-size: 14px; color: var(--muted);
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--navy); }
+    .btn-nav {
+      background: var(--blue); color: var(--white);
+      border: none; border-radius: 8px; padding: 9px 18px;
+      font-size: 13px; font-weight: 500;
+      display: inline-flex; align-items: center; gap: 6px;
+      transition: background .2s, transform .15s;
+    }
+    .btn-nav:hover { background: var(--blue-d); transform: translateY(-1px); }
+    .burger { display: none; background: none; border: none; padding: 4px; }
+
+    /* ─── HERO ─── */
+    .hero {
+      background: var(--ice);
+      padding: 80px 0 64px;
+      overflow: hidden;
+    }
+    .hero-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+    .hero-tag {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: var(--mist); color: var(--blue-d);
+      font-size: 12px; font-weight: 500; padding: 5px 13px;
+      border-radius: 999px; margin-bottom: 22px;
+    }
+    .hero-tag .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--blue); animation: pulse 1.8s infinite;
+    }
+    .hero h1 {
+      font-size: 44px; font-weight: 600; line-height: 1.1;
+      letter-spacing: -1.5px; color: var(--navy);
+      margin-bottom: 20px;
+    }
+    .hero h1 .hl {
+      color: var(--blue);
+      position: relative; display: inline-block;
+    }
+    .hero h1 .hl::after {
+      content: '';
+      position: absolute; left: 0; bottom: -3px;
+      height: 3px; width: 100%; background: var(--border);
+      border-radius: 2px;
+      transform: scaleX(0); transform-origin: left;
+      animation: underlineIn .6s .9s ease forwards;
+    }
+    .hero p {
+      font-size: 17px; color: var(--muted);
+      max-width: 400px; line-height: 1.65;
+      margin-bottom: 32px;
+    }
+    .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 28px; }
+    .btn-primary {
+      background: var(--blue); color: var(--white);
+      border: none; border-radius: 10px; padding: 14px 26px;
+      font-size: 15px; font-weight: 500;
+      display: inline-flex; align-items: center; gap: 8px;
+      transition: background .2s, transform .15s, box-shadow .2s;
+      box-shadow: 0 4px 14px rgba(14,165,233,.35);
+    }
+    .btn-primary:hover { background: var(--blue-d); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(14,165,233,.4); }
+    .btn-ghost {
+      background: var(--white); color: var(--navy);
+      border: 1.5px solid var(--border); border-radius: 10px; padding: 14px 22px;
+      font-size: 15px; font-weight: 500;
+      display: inline-flex; align-items: center; gap: 8px;
+      transition: border-color .2s, transform .15s;
+    }
+    .btn-ghost:hover { border-color: var(--blue); transform: translateY(-2px); }
+    .hero-social {
+      display: flex; align-items: center; gap: 16px;
+      font-size: 13px; color: var(--muted);
+    }
+    .hero-social-item { display: flex; align-items: center; gap: 5px; }
+
+    /* hero right: file cards */
+    .hero-right { animation: slideR .7s .2s ease both; }
+    .file-stack { display: flex; flex-direction: column; gap: 10px; }
+    .file-card {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 12px; padding: 14px 16px;
+      display: flex; align-items: center; gap: 12px;
+      box-shadow: var(--shadow);
+      animation: float 5s ease-in-out infinite;
+    }
+    .file-card:nth-child(2) { animation-delay: .9s; }
+    .file-card:nth-child(3) { animation-delay: 1.8s; }
+    .file-icon {
+      width: 38px; height: 38px; border-radius: 9px;
+      background: var(--ice); color: var(--blue);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+      border: 1px solid var(--border);
+    }
+    .file-info { flex: 1; min-width: 0; }
+    .file-name { font-size: 13px; font-weight: 500; color: var(--navy); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .file-meta { font-size: 11px; color: var(--muted); margin-top: 3px; }
+    .file-bar-wrap { margin-top: 7px; height: 3px; background: var(--mist); border-radius: 999px; overflow: hidden; }
+    .file-bar { height: 100%; border-radius: 999px; background: var(--blue); animation: barGrow 1.4s ease forwards; }
+    .file-badge {
+      font-size: 10px; font-weight: 500; padding: 3px 8px;
+      border-radius: 999px; flex-shrink: 0;
+    }
+    .badge-base { background: var(--mist); color: var(--blue-d); }
+    .badge-add  { background: #DCFCE7; color: #166534; }
+    .badge-ok   { background: #EDE9FE; color: #5B21B6; }
+
+    /* merge arrow */
+    .merge-arrow {
+      display: flex; align-items: center; justify-content: center;
+      padding: 8px 0; color: var(--blue); font-size: 22px;
+    }
+    .merge-result {
+      background: var(--navy); border-radius: 12px; padding: 16px;
+      display: flex; align-items: center; gap: 12px;
+      box-shadow: 0 4px 20px rgba(12,74,110,.2);
+      margin-top: 4px;
+    }
+    .result-icon {
+      width: 42px; height: 42px; border-radius: 10px;
+      background: var(--blue); display: flex; align-items: center;
+      justify-content: center; font-size: 20px; color: var(--white); flex-shrink: 0;
+    }
+    .result-name { font-size: 14px; font-weight: 500; color: var(--white); }
+    .result-meta { font-size: 11px; color: #93C5FD; margin-top: 3px; }
+    .result-dl {
+      margin-left: auto; background: var(--blue); border: none;
+      border-radius: 7px; width: 34px; height: 34px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--white); font-size: 16px; flex-shrink: 0;
+    }
+
+    /* ─── TRUST BAR ─── */
+    .trust {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--white);
+      padding: 20px 0;
+    }
+    .trust-inner {
+      display: flex; justify-content: center;
+      gap: 48px; flex-wrap: wrap;
+    }
+    .trust-item {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; font-weight: 500; color: var(--muted);
+    }
+    .trust-item i { font-size: 18px; color: var(--blue); }
+
+    /* ─── HOW IT WORKS ─── */
+    .section { padding: 88px 0; }
+    .section-tag {
+      display: inline-block; background: var(--mist); color: var(--blue-d);
+      font-size: 11px; font-weight: 600; letter-spacing: .06em;
+      text-transform: uppercase; padding: 4px 12px; border-radius: 999px;
+      margin-bottom: 14px;
+    }
+    .section-title {
+      font-size: 34px; font-weight: 600; letter-spacing: -.8px;
+      color: var(--navy); margin-bottom: 14px;
+    }
+    .section-sub {
+      font-size: 16px; color: var(--muted); max-width: 480px; line-height: 1.65;
+    }
+    .section-header { margin-bottom: 52px; }
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .step {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 28px 24px;
+      position: relative; overflow: hidden;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .step:hover { transform: translateY(-4px); box-shadow: 0 8px 28px rgba(14,165,233,.12); }
+    .step::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 3px; background: var(--blue);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform .3s ease;
+    }
+    .step:hover::before { transform: scaleX(1); }
+    .step-num {
+      font-size: 28px; font-weight: 700; color: var(--mist);
+      margin-bottom: 14px; font-variant-numeric: tabular-nums;
+    }
+    .step-icon {
+      width: 44px; height: 44px; border-radius: 10px;
+      background: var(--ice); color: var(--blue);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; margin-bottom: 16px;
+    }
+    .step h3 { font-size: 16px; font-weight: 600; color: var(--navy); margin-bottom: 8px; }
+    .step p  { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+    /* connector line between steps */
+    .steps-wrap { position: relative; }
+
+    /* ─── FEATURES ─── */
+    .features-bg { background: var(--ice); }
+    .features { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .feature {
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 24px;
+      display: flex; gap: 16px; align-items: flex-start;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .feature:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(14,165,233,.1); }
+    .feature-icon {
+      width: 42px; height: 42px; border-radius: 10px;
+      background: var(--ice); color: var(--blue);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; flex-shrink: 0;
+    }
+    .feature h3 { font-size: 15px; font-weight: 600; color: var(--navy); margin-bottom: 6px; }
+    .feature p  { font-size: 13px; color: var(--muted); line-height: 1.55; }
+
+    /* ─── STATS ─── */
+    .stats-inner {
+      display: grid; grid-template-columns: repeat(4,1fr); gap: 0;
+      border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden;
+    }
+    .stat {
+      padding: 36px 24px; text-align: center;
+      border-right: 1px solid var(--border);
+    }
+    .stat:last-child { border-right: none; }
+    .stat-n {
+      font-size: 36px; font-weight: 700; color: var(--blue);
+      letter-spacing: -1px; line-height: 1;
+      margin-bottom: 8px;
+    }
+    .stat-l { font-size: 13px; color: var(--muted); }
+
+    /* ─── FAQ ─── */
+    .faq { display: flex; flex-direction: column; gap: 12px; max-width: 680px; margin: 0 auto; }
+    .faq-item {
+      border: 1px solid var(--border); border-radius: var(--radius);
+      overflow: hidden;
+    }
+    .faq-q {
+      width: 100%; text-align: left;
+      background: var(--white); border: none;
+      padding: 18px 20px; font-size: 15px; font-weight: 500;
+      color: var(--navy); cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      transition: background .15s;
+    }
+    .faq-q:hover { background: var(--ice); }
+    .faq-q i { font-size: 18px; color: var(--blue); transition: transform .3s; flex-shrink: 0; }
+    .faq-q.open i { transform: rotate(45deg); }
+    .faq-a {
+      max-height: 0; overflow: hidden;
+      background: var(--ice);
+      transition: max-height .35s ease, padding .35s ease;
+      font-size: 14px; color: var(--muted); line-height: 1.65;
+      padding: 0 20px;
+    }
+    .faq-a.open { max-height: 200px; padding: 14px 20px 18px; }
+
+    /* ─── CTA SECTION ─── */
+    .cta-section {
+      background: var(--navy); padding: 80px 0;
+      text-align: center;
+    }
+    .cta-section h2 {
+      font-size: 36px; font-weight: 600; color: var(--white);
+      letter-spacing: -.8px; margin-bottom: 14px;
+    }
+    .cta-section p { font-size: 16px; color: #93C5FD; margin-bottom: 32px; }
+    .btn-cta {
+      background: var(--blue); color: var(--white);
+      border: none; border-radius: 10px; padding: 15px 30px;
+      font-size: 16px; font-weight: 500;
+      display: inline-flex; align-items: center; gap: 9px;
+      transition: background .2s, transform .15s;
+      box-shadow: 0 4px 16px rgba(14,165,233,.4);
+    }
+    .btn-cta:hover { background: var(--blue-d); transform: translateY(-2px); }
+    .cta-note { margin-top: 14px; font-size: 13px; color: #60A5FA; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--night); padding: 40px 0 28px;
+    }
+    .footer-inner {
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 16px; padding-bottom: 28px;
+      border-bottom: 1px solid #1E293B;
+    }
+    .footer-logo { display: flex; align-items: center; gap: 9px; }
+    .footer-logo .logo-icon { background: var(--blue); }
+    .footer-logo span { font-size: 16px; font-weight: 600; color: #F1F5F9; }
+    .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+    .footer-links a { font-size: 13px; color: #64748B; transition: color .2s; }
+    .footer-links a:hover { color: var(--blue); }
+    .footer-bottom {
+      padding-top: 20px; display: flex; justify-content: space-between;
+      align-items: center; flex-wrap: wrap; gap: 10px;
+    }
+    .footer-bottom span { font-size: 12px; color: #334155; }
+    .ko-fi-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; color: #64748B;
+      border: 1px solid #1E293B; border-radius: 999px;
+      padding: 4px 12px; transition: border-color .2s, color .2s;
+    }
+    .ko-fi-link:hover { border-color: var(--blue); color: var(--blue); }
+
+    /* ─── CAFFÈ ─── */
+    .caffe-section { padding: 48px 0; background: var(--white); }
+    .caffe-card {
+      background: var(--ice); border: 1.5px solid var(--border);
+      border-radius: 16px; padding: 28px 32px;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 24px; flex-wrap: wrap;
+    }
+    .caffe-left { display: flex; align-items: flex-start; gap: 20px; flex: 1; min-width: 240px; }
+    .caffe-icon { font-size: 36px; line-height: 1; flex-shrink: 0; margin-top: 2px; }
+    .caffe-left h3 { font-size: 17px; font-weight: 600; color: var(--navy); margin-bottom: 7px; }
+    .caffe-left p  { font-size: 13px; color: var(--muted); line-height: 1.6; max-width: 480px; }
+    .caffe-btn {
+      background: #FF5E5B; color: var(--white);
+      border: none; border-radius: 10px; padding: 13px 22px;
+      font-size: 14px; font-weight: 500; white-space: nowrap;
+      display: inline-flex; align-items: center; gap: 7px;
+      transition: background .2s, transform .15s;
+      flex-shrink: 0;
+    }
+    .caffe-btn:hover { background: #e54e4b; transform: translateY(-2px); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .burger { display: flex; }
+      .nav-links.open {
+        display: flex; flex-direction: column;
+        position: absolute; top: 60px; left: 0; right: 0;
+        background: var(--white); border-bottom: 1px solid var(--border);
+        padding: 16px 24px 20px; gap: 16px; z-index: 99;
+      }
+      nav { position: relative; }
+      .hero-inner { grid-template-columns: 1fr; gap: 36px; }
+      .hero h1 { font-size: 34px; }
+      .hero p { font-size: 15px; }
+      .hero-right { order: -1; }
+      .steps { grid-template-columns: 1fr; }
+      .features { grid-template-columns: 1fr; }
+      .stats-inner { grid-template-columns: 1fr 1fr; }
+      .stat { border-bottom: 1px solid var(--border); }
+      .stat:nth-child(2), .stat:nth-child(4) { border-right: none; }
+      .trust-inner { gap: 24px; justify-content: flex-start; }
+      .section-title { font-size: 26px; }
+      .cta-section h2 { font-size: 26px; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 480px) {
+      .hero h1 { font-size: 28px; }
+      .hero-ctas { flex-direction: column; }
+      .btn-primary, .btn-ghost { justify-content: center; }
+      .stats-inner { grid-template-columns: 1fr; }
+      .stat { border-right: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <div class="container">
+    <div class="nav-inner">
+      <a class="logo" href="#">
+        <div class="logo-icon">U</div>
+        UniNote
+        <span class="logo-badge">Beta</span>
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="#come-funziona">Come funziona</a>
+        <a href="#funzionalita">Funzionalità</a>
+        <a href="#faq">FAQ</a>
+        <a href="app/" class="btn-nav"><i class="ti ti-upload"></i> Prova ora</a>
+      </div>
+      <button class="burger" id="burger" aria-label="Menu">
+        <i class="ti ti-menu-2" style="font-size:22px;color:var(--navy)"></i>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-inner">
+
+      <!-- LEFT -->
+      <div class="hero-left" style="animation:slideL .7s ease both">
+        <div class="hero-tag">
+          <span class="dot"></span>
+          100% locale · nessun server · gratuito
+        </div>
+        <h1>
+          Le tue note JW Library.<br>
+          Tutte <span class="hl">insieme.</span>
+        </h1>
+        <p>
+          Hai backup da iPhone, Android e Windows? UniNote li fonde in un unico file .jwlibrary — senza perdere una nota, un'evidenziazione o un segnalibro.
+        </p>
+        <div class="hero-ctas">
+          <a href="app/" class="btn-primary">
+            <i class="ti ti-upload"></i> Unisci i backup
+          </a>
+          <a href="#come-funziona" class="btn-ghost">
+            <i class="ti ti-play"></i> Come funziona
+          </a>
+        </div>
+        <div class="hero-social">
+          <div class="hero-social-item"><i class="ti ti-shield-check" style="color:var(--blue)"></i> Dati al sicuro</div>
+          <div class="hero-social-item"><i class="ti ti-wifi-off" style="color:var(--blue)"></i> Funziona offline</div>
+          <div class="hero-social-item"><i class="ti ti-heart" style="color:var(--blue)"></i> Sempre gratuito</div>
+        </div>
+      </div>
+
+      <!-- RIGHT: file preview -->
+      <div class="hero-right">
+        <div class="file-stack">
+          <div class="file-card">
+            <div class="file-icon"><i class="ti ti-device-mobile"></i></div>
+            <div class="file-info">
+              <div class="file-name">MAX_iPhone.jwlibrary</div>
+              <div class="file-meta">2.678 note · 46.728 evidenziazioni</div>
+              <div class="file-bar-wrap"><div class="file-bar" style="--w:95%"></div></div>
+            </div>
+            <span class="file-badge badge-base">Base</span>
+          </div>
+          <div class="file-card">
+            <div class="file-icon" style="color:#0EA5E9"><i class="ti ti-device-mobile"></i></div>
+            <div class="file-info">
+              <div class="file-name">Xiaomi_2407.jwlibrary</div>
+              <div class="file-meta">2.669 note · 46.516 evidenziazioni</div>
+              <div class="file-bar-wrap"><div class="file-bar" style="--w:88%;animation-delay:.3s"></div></div>
+            </div>
+            <span class="file-badge badge-add">+10</span>
+          </div>
+          <div class="file-card">
+            <div class="file-icon" style="color:#7C3AED"><i class="ti ti-brand-windows"></i></div>
+            <div class="file-info">
+              <div class="file-name">Xiaomi_2105.jwlibrary</div>
+              <div class="file-meta">2.633 note · 45.601 evidenziazioni</div>
+              <div class="file-bar-wrap"><div class="file-bar" style="--w:75%;background:#7C3AED;animation-delay:.6s"></div></div>
+            </div>
+            <span class="file-badge badge-ok">OK</span>
+          </div>
+
+          <div class="merge-arrow"><i class="ti ti-git-merge"></i></div>
+
+          <div class="merge-result">
+            <div class="result-icon"><i class="ti ti-file-check"></i></div>
+            <div>
+              <div class="result-name">UniNote_merged.jwlibrary</div>
+              <div class="result-meta">2.679 note · 46.733 evidenziazioni · 0 duplicati</div>
+            </div>
+            <button class="result-dl" title="Download"><i class="ti ti-download"></i></button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ TRUST BAR ══ -->
+<div class="trust">
+  <div class="container">
+    <div class="trust-inner">
+      <div class="trust-item"><i class="ti ti-lock"></i> I dati non lasciano il tuo dispositivo</div>
+      <div class="trust-item"><i class="ti ti-brand-github"></i> Codice sorgente pubblico</div>
+      <div class="trust-item"><i class="ti ti-wifi-off"></i> Funziona senza connessione</div>
+      <div class="trust-item"><i class="ti ti-credit-card-off"></i> Nessun abbonamento</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ HOW IT WORKS ══ -->
+<section class="section" id="come-funziona">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">Come funziona</span>
+      <h2 class="section-title">Tre passi, sessanta secondi.</h2>
+      <p class="section-sub">Nessuna installazione, nessun account. Tutto avviene nel browser, sul tuo dispositivo.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal" style="transition-delay:.05s">
+        <div class="step-num">01</div>
+        <div class="step-icon"><i class="ti ti-upload"></i></div>
+        <h3>Carica i backup</h3>
+        <p>Trascina i file .jwlibrary nell'area di caricamento — da 2 a 4 dispositivi. UniNote li analizza automaticamente e mostra le statistiche di ciascuno.</p>
+      </div>
+      <div class="step reveal" style="transition-delay:.15s">
+        <div class="step-num">02</div>
+        <div class="step-icon"><i class="ti ti-adjustments-horizontal"></i></div>
+        <h3>Risolvi i conflitti</h3>
+        <p>Se la stessa nota esiste in versioni diverse, scegli: Tieni A, Tieni B, Tieni entrambe o Unisci il testo. Un pulsante risolve tutto in blocco.</p>
+      </div>
+      <div class="step reveal" style="transition-delay:.25s">
+        <div class="step-num">03</div>
+        <div class="step-icon"><i class="ti ti-download"></i></div>
+        <h3>Scarica il risultato</h3>
+        <p>Ottieni un file .jwlibrary pronto all'importazione in JW Library. Nessun dato è stato inviato a nessun server.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FEATURES ══ -->
+<section class="section features-bg" id="funzionalita">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">Funzionalità</span>
+      <h2 class="section-title">Tutto quello che ti serve. Niente di superfluo.</h2>
+    </div>
+    <div class="features">
+      <div class="feature reveal" style="transition-delay:.05s">
+        <div class="feature-icon"><i class="ti ti-git-merge"></i></div>
+        <div>
+          <h3>Merge preciso</h3>
+          <p>Confronto GUID per GUID su note ed evidenziazioni. Deduplica intelligente per posizioni, tag e segnalibri.</p>
+        </div>
+      </div>
+      <div class="feature reveal" style="transition-delay:.1s">
+        <div class="feature-icon"><i class="ti ti-alert-triangle"></i></div>
+        <div>
+          <h3>Risoluzione conflitti</h3>
+          <p>4 opzioni per ogni conflitto: Tieni A, Tieni B, Tieni entrambe o Unisci il testo delle due versioni.</p>
+        </div>
+      </div>
+      <div class="feature reveal" style="transition-delay:.15s">
+        <div class="feature-icon"><i class="ti ti-chart-bar"></i></div>
+        <div>
+          <h3>Statistiche dettagliate</h3>
+          <p>Riepilogo visivo di note, evidenziazioni e segnalibri per ciascun file prima del merge.</p>
+        </div>
+      </div>
+      <div class="feature reveal" style="transition-delay:.2s">
+        <div class="feature-icon"><i class="ti ti-device-mobile"></i></div>
+        <div>
+          <h3>PWA installabile</h3>
+          <p>Installabile su iPhone, Android e Windows. Funziona offline dopo il primo caricamento.</p>
+        </div>
+      </div>
+      <div class="feature reveal" style="transition-delay:.25s">
+        <div class="feature-icon"><i class="ti ti-shield-lock"></i></div>
+        <div>
+          <h3>Completamente privato</h3>
+          <p>Zero server. Zero cloud. I backup vengono letti e processati esclusivamente nel tuo browser.</p>
+        </div>
+      </div>
+      <div class="feature reveal" style="transition-delay:.3s">
+        <div class="feature-icon"><i class="ti ti-bug"></i></div>
+        <div>
+          <h3>Pannello debug</h3>
+          <p>Modalità avanzata per chi vuole ispezionare nel dettaglio ogni nota, conflitto e chiave primaria nel file finale.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ STATS ══ -->
+<section class="section" style="padding:60px 0">
+  <div class="container">
+    <div class="stats-inner reveal">
+      <div class="stat">
+        <div class="stat-n" data-target="2679">0</div>
+        <div class="stat-l">Note nel backup di test</div>
+      </div>
+      <div class="stat">
+        <div class="stat-n" data-target="46733">0</div>
+        <div class="stat-l">Evidenziazioni unite</div>
+      </div>
+      <div class="stat">
+        <div class="stat-n" data-target="89">0</div>
+        <div class="stat-l">Segnalibri</div>
+      </div>
+      <div class="stat">
+        <div class="stat-n">0 byte</div>
+        <div class="stat-l">Inviati a server esterni</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FAQ ══ -->
+<section class="section features-bg" id="faq" style="padding-top:72px;padding-bottom:72px">
+  <div class="container">
+    <div class="section-header reveal" style="text-align:center;margin-bottom:40px">
+      <span class="section-tag">FAQ</span>
+      <h2 class="section-title">Domande frequenti</h2>
+    </div>
+    <div class="faq">
+      <div class="faq-item reveal" style="transition-delay:.05s">
+        <button class="faq-q"><span>I miei dati sono al sicuro?</span><i class="ti ti-plus"></i></button>
+        <div class="faq-a">Sì, al 100%. UniNote funziona interamente nel tuo browser: i file .jwlibrary vengono letti in memoria locale e non vengono mai trasmessi a nessun server. Puoi anche usarlo offline dopo il primo caricamento della pagina.</div>
+      </div>
+      <div class="faq-item reveal" style="transition-delay:.1s">
+        <button class="faq-q"><span>Quanti file posso unire?</span><i class="ti ti-plus"></i></button>
+        <div class="faq-a">Puoi caricare da 2 a 4 file .jwlibrary contemporaneamente. Il primo file caricato viene usato come base; gli altri vengono uniti in sequenza, con rilevamento automatico dei duplicati e dei conflitti.</div>
+      </div>
+      <div class="faq-item reveal" style="transition-delay:.15s">
+        <button class="faq-q"><span>Cosa succede se la stessa nota esiste in versioni diverse?</span><i class="ti ti-plus"></i></button>
+        <div class="faq-a">UniNote rileva i conflitti (stesso GUID, testo diverso) e ti permette di scegliere per ciascuno: tenere la versione A, la versione B, tenerle entrambe come note separate, oppure unire il testo delle due. C'è anche un pulsante "Unisci tutto" che applica la fusione a tutti i conflitti in blocco.</div>
+      </div>
+      <div class="faq-item reveal" style="transition-delay:.2s">
+        <button class="faq-q"><span>Funziona su iPhone e Android?</span><i class="ti ti-plus"></i></button>
+        <div class="faq-a">Sì. UniNote è una PWA (Progressive Web App). Su Android e Windows puoi installarla direttamente dal browser. Su iPhone devi usare Safari e selezionare "Aggiungi alla schermata Home" — dopo l'installazione funziona offline.</div>
+      </div>
+      <div class="faq-item reveal" style="transition-delay:.25s">
+        <button class="faq-q"><span>È davvero gratuito? Per sempre?</span><i class="ti ti-plus"></i></button>
+        <div class="faq-a">Sì. UniNote è e rimarrà gratuito. Se lo trovi utile, puoi offrire un caffè tramite Ko-fi per contribuire ai costi di hosting — ma è assolutamente facoltativo.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CAFFÈ ══ -->
+<section class="caffe-section">
+  <div class="container">
+    <div class="caffe-card reveal">
+      <div class="caffe-left">
+        <div class="caffe-icon">☕</div>
+        <div>
+          <h3>Un caffè per tenere UniNote sveglio?</h3>
+          <p>UniNote è gratis e lo resterà. Se ti ha fatto risparmiare tempo — o almeno una sana frustrazione — puoi offrirmi un caffè su Ko-fi. Aiuta a coprire l'hosting e mi motiva a migliorare l'app.</p>
+        </div>
+      </div>
+      <a class="caffe-btn" href="https://ko-fi.com/jocher" target="_blank" rel="noopener">
+        ☕ Offrimi un caffè
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA ══ -->
+<section class="cta-section">
+  <div class="container reveal">
+    <h2>Pronto a unire i tuoi backup?</h2>
+    <p>Un file. Tutte le note. Nessuna perdita. In 60 secondi.</p>
+    <a href="app/" class="btn-cta">
+      <i class="ti ti-upload"></i> Apri UniNote — è gratis
+    </a>
+    <p class="cta-note">Nessun account. Nessun download. Solo il tuo browser.</p>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <div class="logo-icon">U</div>
+        <span>UniNote</span>
+      </div>
+      <div class="footer-links">
+        <a href="#come-funziona">Come funziona</a>
+        <a href="#faq">FAQ</a>
+        <a href="https://github.com/SintesiApp/UniNote" target="_blank" rel="noopener">GitHub</a>
+        <a href="app/">App</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2024 UniNote — fatto con ♥ per la comunità JW</span>
+      <a class="ko-fi-link" href="https://ko-fi.com/jocher" target="_blank" rel="noopener">
+        ☕ Offrimi un caffè
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── Burger menu ── */
+const burger = document.getElementById('burger');
+const navLinks = document.getElementById('navLinks');
+burger.addEventListener('click', () => navLinks.classList.toggle('open'));
+
+/* ── Scroll reveal ── */
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal, .reveal-l, .reveal-r').forEach(el => observer.observe(el));
+
+/* ── FAQ accordion ── */
+document.querySelectorAll('.faq-q').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const isOpen = btn.classList.contains('open');
+    // close all
+    document.querySelectorAll('.faq-q').forEach(b => {
+      b.classList.remove('open');
+      b.nextElementSibling.classList.remove('open');
+    });
+    if (!isOpen) {
+      btn.classList.add('open');
+      btn.nextElementSibling.classList.add('open');
+    }
+  });
+});
+
+/* ── Counter animation ── */
+function animateCount(el, target, duration = 1600) {
+  const start = performance.now();
+  const update = (now) => {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.floor(eased * target).toLocaleString('it-IT');
+    if (progress < 1) requestAnimationFrame(update);
+  };
+  requestAnimationFrame(update);
+}
+const counters = document.querySelectorAll('[data-target]');
+const counterObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      animateCount(e.target, +e.target.dataset.target);
+      counterObs.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.5 });
+counters.forEach(c => counterObs.observe(c));
+
+/* ── Bar animation (delayed load) ── */
+window.addEventListener('load', () => {
+  document.querySelectorAll('.file-bar').forEach((bar, i) => {
+    const w = getComputedStyle(bar).getPropertyValue('--w').trim() || '80%';
+    bar.style.width = '0';
+    setTimeout(() => {
+      bar.style.transition = 'width 1.3s ease';
+      bar.style.width = w;
+    }, 400 + i * 300);
+  });
+});
+</script>
+<!-- ══ FLOATING CAFFÈ BUTTON ══ -->
+<div class="fab-caffe" id="fabCaffe">
+  <div class="fab-bubble" id="fabBubble">
+    Hai unito le note… ora unisci anche un caffè? ☕
+    <div class="fab-bubble-arrow"></div>
+  </div>
+  <a class="fab-btn" href="https://ko-fi.com/jocher" target="_blank" rel="noopener" title="Offrimi un caffè su Ko-fi">
+    <span class="fab-cup">☕</span>
+    <span class="steam s1"></span>
+    <span class="steam s2"></span>
+    <span class="steam s3"></span>
+  </a>
+</div>
+
+<style>
+@keyframes steamRise { 0%{opacity:0;transform:translateY(0) scaleX(1)} 40%{opacity:.7} 100%{opacity:0;transform:translateY(-14px) scaleX(1.4)} }
+@keyframes fabBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-6px)} }
+@keyframes bubblePop { from{opacity:0;transform:translateY(6px) scale(.95)} to{opacity:1;transform:translateY(0) scale(1)} }
+
+.fab-caffe {
+  position: fixed; bottom: 24px; right: 24px;
+  z-index: 999; display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
+}
+.fab-btn {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: #FF5E5B; box-shadow: 0 4px 18px rgba(255,94,91,.45);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; position: relative; overflow: visible;
+  animation: fabBounce 3s ease-in-out infinite;
+  transition: transform .2s, box-shadow .2s;
+  text-decoration: none;
+}
+.fab-btn:hover { transform: scale(1.12) translateY(-2px); box-shadow: 0 6px 24px rgba(255,94,91,.55); animation: none; }
+.fab-cup { position: relative; z-index: 1; line-height: 1; }
+
+.steam {
+  position: absolute; bottom: 34px; width: 4px; border-radius: 999px;
+  background: rgba(255,255,255,.7);
+  animation: steamRise 1.6s ease-in-out infinite;
+}
+.s1 { left: 50%; transform: translateX(-8px); height: 10px; animation-delay: 0s; }
+.s2 { left: 50%; transform: translateX(-50%); height: 14px; animation-delay: .4s; }
+.s3 { left: 50%; transform: translateX(4px);  height: 10px; animation-delay: .8s; }
+
+.fab-bubble {
+  background: var(--night); color: #F1F5F9;
+  font-size: 13px; font-weight: 500; line-height: 1.4;
+  padding: 11px 16px; border-radius: 12px;
+  max-width: 230px; text-align: right;
+  position: relative; box-shadow: 0 4px 16px rgba(0,0,0,.25);
+  opacity: 0; pointer-events: none;
+  animation: bubblePop .35s ease forwards;
+  animation-play-state: paused;
+}
+.fab-bubble.show { opacity: 1; pointer-events: auto; animation-play-state: running; }
+.fab-bubble-arrow {
+  position: absolute; bottom: -7px; right: 18px;
+  width: 14px; height: 8px;
+  background: var(--night);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+</style>
+
+<script>
+(function() {
+  const fab = document.getElementById('fabCaffe');
+  const bubble = document.getElementById('fabBubble');
+  const btn = fab.querySelector('.fab-btn');
+  let hideTimer;
+
+  // Show bubble after 4s
+  setTimeout(() => bubble.classList.add('show'), 4000);
+
+  // Toggle on click of btn area (not the link itself)
+  btn.addEventListener('mouseenter', () => {
+    clearTimeout(hideTimer);
+    bubble.classList.add('show');
+  });
+  fab.addEventListener('mouseleave', () => {
+    hideTimer = setTimeout(() => bubble.classList.remove('show'), 1200);
+  });
+
+  // Auto-hide bubble after 7s
+  setTimeout(() => {
+    if (!fab.matches(':hover')) bubble.classList.remove('show');
+  }, 11000);
+})();
+</script>
+
+</body>
+</html>

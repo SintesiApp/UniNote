@@ -1,0 +1,13 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# File di test/backup
+*.jwlibrary
+*.db
+*.zip
+*.docx
+
+# Cartella versioni precedenti non necessarie online
+versioni-precedenti/
+documentazione/

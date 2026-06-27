@@ -1,0 +1,2590 @@
+<!DOCTYPE html>
+<!-- saved from url=(0039)https://uninote.sintesiapp.workers.dev/ -->
+<html lang="it"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="UniNote">
+<meta name="theme-color" content="#f8fafc">
+<title>UniNote</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iYmciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMjU2M2ViIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzE0YjhhNiIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CiAgPHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSIxMTUiIGZpbGw9InVybCgjYmcpIi8+CiAgPHBhdGggZD0iTTYwLDY0IEwxNDgsNjQgTDE0OCwyOTYgUTE0OCwzNjggMjU2LDM2OCBRMzY0LDM2OCAzNjQsMjk2IEwzNjQsNjQgTDQ1Miw2NCBMNDUyLDI5NiBRNDUyLDQyMiAyNTYsNDIyIFE2MCw0MjIgNjAsMjk2IFoiIGZpbGw9IndoaXRlIi8+CiAgPHJlY3QgeD0iMTc1IiB5PSIxOCIgd2lkdGg9IjU0IiBoZWlnaHQ9Ijg2IiByeD0iOSIgZmlsbD0id2hpdGUiIG9wYWNpdHk9IjAuMjIiIHRyYW5zZm9ybT0icm90YXRlKC0yMCAyMDIgNjEpIi8+CiAgPHJlY3QgeD0iMjEwIiB5PSIxMCIgd2lkdGg9IjU0IiBoZWlnaHQ9IjkyIiByeD0iOSIgZmlsbD0id2hpdGUiIG9wYWNpdHk9IjAuNTAiIHRyYW5zZm9ybT0icm90YXRlKC03IDIzNyA1NikiLz4KICA8cmVjdCB4PSIyNTAiIHk9IjgiICB3aWR0aD0iNTQiIGhlaWdodD0iOTIiIHJ4PSI5IiBmaWxsPSJ3aGl0ZSIgb3BhY2l0eT0iMC44MiIgdHJhbnNmb3JtPSJyb3RhdGUoIDcgMjc3IDU0KSIvPgogIDx0ZXh0IHg9IjI1NiIgeT0iNDY2IiBmb250LWZhbWlseT0iSGVsdmV0aWNhIE5ldWUsSGVsdmV0aWNhLEFyaWFsLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNTQiIGZvbnQtd2VpZ2h0PSI4MDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBsZXR0ZXItc3BhY2luZz0iLTAuNSI+dW5pbm90ZTwvdGV4dD4KICA8dGV4dCB4PSIyNTYiIHk9IjQ5MyIgZm9udC1mYW1pbHk9IkhlbHZldGljYSBOZXVlLEhlbHZldGljYSxBcmlhbCxzYW5zLXNlcmlmIiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iNDAwIiBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuNjIpIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBsZXR0ZXItc3BhY2luZz0iMi4zIj5VTklTQ0UgSSBCQUNLVVAgREkgSldMSUJSQVJZPC90ZXh0Pgo8L3N2Zz4=">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iYmciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMjU2M2ViIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzE0YjhhNiIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CiAgPHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSIxMTUiIGZpbGw9InVybCgjYmcpIi8+CiAgPHBhdGggZD0iTTYwLDY0IEwxNDgsNjQgTDE0OCwyOTYgUTE0OCwzNjggMjU2LDM2OCBRMzY0LDM2OCAzNjQsMjk2IEwzNjQsNjQgTDQ1Miw2NCBMNDUyLDI5NiBRNDUyLDQyMiAyNTYsNDIyIFE2MCw0MjIgNjAsMjk2IFoiIGZpbGw9IndoaXRlIi8+CiAgPHJlY3QgeD0iMTc1IiB5PSIxOCIgd2lkdGg9IjU0IiBoZWlnaHQ9Ijg2IiByeD0iOSIgZmlsbD0id2hpdGUiIG9wYWNpdHk9IjAuMjIiIHRyYW5zZm9ybT0icm90YXRlKC0yMCAyMDIgNjEpIi8+CiAgPHJlY3QgeD0iMjEwIiB5PSIxMCIgd2lkdGg9IjU0IiBoZWlnaHQ9IjkyIiByeD0iOSIgZmlsbD0id2hpdGUiIG9wYWNpdHk9IjAuNTAiIHRyYW5zZm9ybT0icm90YXRlKC03IDIzNyA1NikiLz4KICA8cmVjdCB4PSIyNTAiIHk9IjgiICB3aWR0aD0iNTQiIGhlaWdodD0iOTIiIHJ4PSI5IiBmaWxsPSJ3aGl0ZSIgb3BhY2l0eT0iMC44MiIgdHJhbnNmb3JtPSJyb3RhdGUoIDcgMjc3IDU0KSIvPgogIDx0ZXh0IHg9IjI1NiIgeT0iNDY2IiBmb250LWZhbWlseT0iSGVsdmV0aWNhIE5ldWUsSGVsdmV0aWNhLEFyaWFsLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNTQiIGZvbnQtd2VpZ2h0PSI4MDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBsZXR0ZXItc3BhY2luZz0iLTAuNSI+dW5pbm90ZTwvdGV4dD4KICA8dGV4dCB4PSIyNTYiIHk9IjQ5MyIgZm9udC1mYW1pbHk9IkhlbHZldGljYSBOZXVlLEhlbHZldGljYSxBcmlhbCxzYW5zLXNlcmlmIiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iNDAwIiBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuNjIpIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBsZXR0ZXItc3BhY2luZz0iMi4zIj5VTklTQ0UgSSBCQUNLVVAgREkgSldMSUJSQVJZPC90ZXh0Pgo8L3N2Zz4=">
+<script>
+(function(){
+  var m={name:"UniNote",short_name:"UniNote",start_url:"https://uninote.sintesiapp.workers.dev/",display:"standalone",background_color:"#f8fafc",theme_color:"#2563eb",icons:[{src:"data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iYmciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMjU2M2ViIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzE0YjhhNiIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CiAgPHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSIxMTUiIGZpbGw9InVybCgjYmcpIi8+CiAgPHBhdGggZD0iTTYwLDY0IEwxNDgsNjQgTDE0OCwyOTYgUTE0OCwzNjggMjU2LDM2OCBRMzY0LDM2OCAzNjQsMjk2IEwzNjQsNjQgTDQ1Miw2NCBMNDUyLDI5NiBRNDUyLDQyMiAyNTYsNDIyIFE2MCw0MjIgNjAsMjk2IFoiIGZpbGw9IndoaXRlIi8+CiAgPHJlY3QgeD0iMTc1IiB5PSIxOCIgd2lkdGg9IjU0IiBoZWlnaHQ9Ijg2IiByeD0iOSIgZmlsbD0id2hpdGUiIG9wYWNpdHk9IjAuMjIiIHRyYW5zZm9ybT0icm90YXRlKC0yMCAyMDIgNjEpIi8+CiAgPHJlY3QgeD0iMjEwIiB5PSIxMCIgd2lkdGg9IjU0IiBoZWlnaHQ9IjkyIiByeD0iOSIgZmlsbD0id2hpdGUiIG9wYWNpdHk9IjAuNTAiIHRyYW5zZm9ybT0icm90YXRlKC03IDIzNyA1NikiLz4KICA8cmVjdCB4PSIyNTAiIHk9IjgiICB3aWR0aD0iNTQiIGhlaWdodD0iOTIiIHJ4PSI5IiBmaWxsPSJ3aGl0ZSIgb3BhY2l0eT0iMC44MiIgdHJhbnNmb3JtPSJyb3RhdGUoIDcgMjc3IDU0KSIvPgogIDx0ZXh0IHg9IjI1NiIgeT0iNDY2IiBmb250LWZhbWlseT0iSGVsdmV0aWNhIE5ldWUsSGVsdmV0aWNhLEFyaWFsLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNTQiIGZvbnQtd2VpZ2h0PSI4MDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBsZXR0ZXItc3BhY2luZz0iLTAuNSI+dW5pbm90ZTwvdGV4dD4KICA8dGV4dCB4PSIyNTYiIHk9IjQ5MyIgZm9udC1mYW1pbHk9IkhlbHZldGljYSBOZXVlLEhlbHZldGljYSxBcmlhbCxzYW5zLXNlcmlmIiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iNDAwIiBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuNjIpIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBsZXR0ZXItc3BhY2luZz0iMi4zIj5VTklTQ0UgSSBCQUNLVVAgREkgSldMSUJSQVJZPC90ZXh0Pgo8L3N2Zz4=",sizes:"192x192",type:"image/svg+xml"}]};
+  var b=new Blob([JSON.stringify(m)],{type:"application/manifest+json"});
+  var l=document.createElement("link");l.rel="manifest";l.href=URL.createObjectURL(b);
+  document.currentScript.parentNode.insertBefore(l,document.currentScript);
+})();
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com/">
+<style>
+  :root {
+    --bg:         #f8fafc;
+    --bg-2:       #ffffff;
+    --bg-3:       #eef4ff;
+    --bg-4:       #dbeafe;
+    --border:     rgba(15,23,42,0.08);
+    --border-2:   rgba(37,99,235,0.22);
+    --gold:       #2563eb;
+    --gold-2:     #38bdf8;
+    --gold-dim:   rgba(37,99,235,0.10);
+    --gold-glow:  0 0 28px rgba(37,99,235,0.18);
+    --amber:      #14b8a6;
+    --text:       #0f172a;
+    --text-2:     #475569;
+    --text-3:     #64748b;
+    --ok:         #059669;
+    --ok-dim:     rgba(5,150,105,0.10);
+    --warn:       #d97706;
+    --warn-dim:   rgba(217,119,6,0.10);
+    --err:        #dc2626;
+    --err-dim:    rgba(220,38,38,0.10);
+    --r:          16px;
+    --r-sm:       10px;
+    --r-xs:       6px;
+    --shadow:     0 8px 24px rgba(15,23,42,0.06);
+    --shadow-lg:  0 18px 56px rgba(15,23,42,0.12);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { height: 100%; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse 80% 42% at 50% 0%, rgba(37,99,235,0.08) 0%, transparent 72%), radial-gradient(ellipse 50% 28% at 85% 8%, rgba(20,184,166,0.08) 0%, transparent 68%);
+    color: var(--text);
+    min-height: 100%;
+    display: flex; flex-direction: column; align-items: center;
+    padding-bottom: 56px;
+  }
+
+  /* ── HEADER ── */
+  .app-header {
+    width: 100%;
+    background: rgba(248,250,252,0.88);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: 16px 20px;
+    display: flex; align-items: center; gap: 12px;
+    position: sticky; top: 0; z-index: 100;
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 1px 18px rgba(15,23,42,0.06);
+  }
+  .app-logo {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--gold), var(--amber));
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+    box-shadow: 0 8px 20px rgba(37,99,235,0.22);
+  }
+  .app-title {
+    font-size: 20px; font-weight: 700;
+    color: var(--text); letter-spacing: -0.4px;
+  }
+  .app-subtitle { font-size: 11px; color: var(--text-3); margin-top: 1px; }
+  .header-badge {
+    margin-left: auto;
+    font-size: 9px; font-weight: 700; letter-spacing: 1px;
+    color: var(--ok); background: var(--ok-dim);
+    border: 1px solid rgba(5,150,105,0.18);
+    border-radius: 20px; padding: 3px 9px; text-transform: uppercase;
+  }
+  .btn-help {
+    background: var(--bg-3); border: 1px solid var(--border-2);
+    color: var(--text-2); border-radius: 50%;
+    width: 32px; height: 32px; font-size: 14px; font-weight: 700;
+    cursor: pointer; flex-shrink: 0; transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .btn-help:hover { border-color: var(--gold); color: var(--gold); background: var(--gold-dim); }
+  .btn-help:focus-visible, .btn:focus-visible, .btn-pick:focus-visible, .btn-pwa-install:focus-visible, .pwa-dismiss:focus-visible, .btn-pwa-later:focus-visible, .file-remove:focus-visible, .conflict-choice:focus-visible, .btn-apply-all:focus-visible, .btn-coffee:focus-visible, .btn-coffee-done:focus-visible, .coffee-dismiss:focus-visible {
+    outline: 3px solid rgba(37,99,235,0.28); outline-offset: 2px;
+  }
+
+  /* ── STEP INDICATOR ── */
+  .steps-bar {
+    width: 100%; max-width: 560px;
+    margin: 24px auto 0; padding: 0 20px;
+    display: flex; align-items: center;
+  }
+  .step-item {
+    flex: 1; display: flex; flex-direction: column;
+    align-items: center; gap: 7px; position: relative;
+  }
+  .step-item:not(:last-child)::after {
+    content: ''; position: absolute;
+    top: 13px; left: calc(50% + 16px); right: calc(-50% + 16px);
+    height: 1px; background: var(--border-2); transition: background 0.4s;
+  }
+  .step-item.done:not(:last-child)::after { background: var(--gold); }
+  .step-dot {
+    width: 26px; height: 26px; border-radius: 50%;
+    border: 1.5px solid var(--border-2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700;
+    color: var(--text-3); background: var(--bg-2);
+    transition: all 0.3s; z-index: 1;
+  }
+  .step-item.active .step-dot {
+    border-color: var(--gold); background: var(--gold);
+    color: #fff; box-shadow: var(--gold-glow);
+  }
+  .step-item.done .step-dot {
+    border-color: var(--gold); background: var(--gold-dim); color: var(--gold);
+  }
+  .step-label { font-size: 10px; color: var(--text-3); letter-spacing: 0.3px; }
+  .step-item.active .step-label { color: var(--gold); font-weight: 600; }
+  .step-item.done .step-label  { color: var(--gold); }
+
+  /* ── MAIN CARD ── */
+  .main-card { width: 100%; max-width: 560px; margin: 20px auto 0; padding: 0 16px; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1.2px; color: var(--text-3); margin-bottom: 12px; margin-top: 22px;
+  }
+
+  /* ── DROP ZONE ── */
+  .drop-zone {
+    background: var(--bg-2);
+    border: 1.5px dashed var(--border-2);
+    border-radius: var(--r); padding: 30px 20px 22px;
+    text-align: center; transition: all 0.25s;
+    box-shadow: var(--shadow);
+  }
+  .drop-zone:focus-visible {
+    border-color: var(--gold); box-shadow: var(--gold-glow); outline: none;
+  }
+  .drop-zone.drag-over {
+    border-color: var(--gold); background: var(--gold-dim);
+    box-shadow: var(--gold-glow);
+  }
+  .sync-animation {
+    width: min(100%, 380px); height: 200px; margin: 0 auto 14px;
+    position: relative; display: block; pointer-events: none;
+  }
+  .sync-hub {
+    width: 88px; height: 88px; border-radius: 24px;
+    background: transparent;
+    box-shadow: 0 14px 34px rgba(37,99,235,0.28);
+    display: flex; align-items: center; justify-content: center;
+    position: absolute; z-index: 3;
+    left: calc(50% - 44px); top: 20px; animation: hubPulse 2.8s ease-in-out infinite;
+    overflow: hidden;
+  }
+  .sync-hub img { width: 88px; height: 88px; display: block; }
+  .sync-device {
+    position: absolute;
+    background: linear-gradient(180deg, rgba(37,99,235,0.12), rgba(20,184,166,0.07));
+    border: 1.5px solid rgba(37,99,235,0.22);
+    box-shadow: 0 10px 24px rgba(15,23,42,0.08); display: flex; align-items: center;
+    justify-content: center; color: var(--gold); font-size: 17px; z-index: 2;
+  }
+  .sync-phone { width: 32px; height: 58px; border-radius: 10px; left: 58px; top: 128px; }
+  .sync-pc { width: 72px; height: 48px; border-radius: 9px; left: calc(50% - 36px); top: 132px; }
+  .sync-pc::after {
+    content: ''; position: absolute; width: 32px; height: 5px; border-radius: 6px;
+    background: var(--bg-4); left: 50%; bottom: -10px; transform: translateX(-50%);
+  }
+  .sync-tablet { width: 62px; height: 46px; border-radius: 12px; right: 56px; top: 132px; }
+  .sync-tablet::before {
+    content: ''; width: 43px; height: 28px; border: 2px solid var(--gold);
+    border-radius: 6px; background: rgba(255,255,255,0.68); box-shadow: inset 0 -5px 0 rgba(37,99,235,0.08);
+  }
+  .sync-tablet::after {
+    content: ''; position: absolute; width: 5px; height: 5px; border-radius: 50%;
+    background: var(--gold); right: 7px; top: 50%; transform: translateY(-50%); opacity: 0.8;
+  }
+  .packet {
+    position: absolute; min-width: 26px; height: 24px; border-radius: 999px;
+    display: flex; align-items: center; justify-content: center; padding: 0 8px;
+    font-size: 11px; font-weight: 900; letter-spacing: 0.2px; z-index: 2; opacity: 0;
+  }
+  .packet-in {
+    color: var(--gold); background: rgba(37,99,235,0.12); border: 1px solid rgba(37,99,235,0.26);
+    box-shadow: 0 0 0 5px rgba(37,99,235,0.08);
+  }
+  .packet-out {
+    color: var(--ok); background: var(--ok-dim); border: 1px solid rgba(26,122,74,0.22);
+    box-shadow: 0 0 0 5px rgba(5,150,105,0.08); min-width: 62px;
+  }
+  .packet-phone { left: 80px; top: 142px; animation: sendPhone 3.6s ease-in-out infinite; }
+  .packet-pc { left: calc(50% - 13px); top: 132px; animation: sendPc 3.6s ease-in-out infinite 0.25s; }
+  .packet-tablet { right: 82px; top: 140px; animation: sendTablet 3.6s ease-in-out infinite 0.5s; }
+  .packet-out-phone { left: calc(50% - 31px); top: 78px; animation: returnPhone 3.6s ease-in-out infinite 1.45s; }
+  .packet-out-pc { left: calc(50% - 31px); top: 78px; animation: returnPc 3.6s ease-in-out infinite 1.65s; }
+  .packet-out-tablet { left: calc(50% - 31px); top: 78px; animation: returnTablet 3.6s ease-in-out infinite 1.85s; }
+  @keyframes hubPulse { 0%,100% { transform: scale(1); } 45% { transform: scale(1.04); } }
+  @keyframes sendPhone { 0%,12% { transform: translate(0,0); opacity: 0; } 27% { opacity: 1; } 45%,100% { transform: translate(82px,-76px); opacity: 0; } }
+  @keyframes sendPc { 0%,12% { transform: translate(0,0); opacity: 0; } 27% { opacity: 1; } 45%,100% { transform: translate(0,-66px); opacity: 0; } }
+  @keyframes sendTablet { 0%,12% { transform: translate(0,0); opacity: 0; } 27% { opacity: 1; } 45%,100% { transform: translate(-96px,-74px); opacity: 0; } }
+  @keyframes returnPhone { 0%,10% { transform: translate(0,0); opacity: 0; } 26% { opacity: 1; } 58%,100% { transform: translate(-112px,74px); opacity: 0; } }
+  @keyframes returnPc { 0%,10% { transform: translate(0,0); opacity: 0; } 26% { opacity: 1; } 58%,100% { transform: translate(0,66px); opacity: 0; } }
+  @keyframes returnTablet { 0%,10% { transform: translate(0,0); opacity: 0; } 26% { opacity: 1; } 58%,100% { transform: translate(108px,72px); opacity: 0; } }
+  .drop-title { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 5px; }
+  .drop-hint  { font-size: 13px; color: var(--text-3); margin-bottom: 12px; }
+  .drop-ext {
+    display: inline-block; background: var(--bg-3); color: var(--gold);
+    font-size: 10px; font-weight: 700; padding: 3px 10px; border-radius: 20px;
+    letter-spacing: 1.5px; border: 1px solid var(--border-2);
+  }
+  .btn-pick {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    background: linear-gradient(135deg, var(--gold), var(--amber));
+    color: #fff; border: none; border-radius: var(--r-sm);
+    font-size: 15px; font-weight: 700;
+    padding: 14px 28px; margin-top: 16px; cursor: pointer; width: 100%;
+    box-shadow: 0 10px 24px rgba(37,99,235,0.20);
+    transition: all 0.2s; -webkit-tap-highlight-color: transparent;
+  }
+  .btn-pick:hover { box-shadow: 0 14px 34px rgba(37,99,235,0.26); transform: translateY(-1px); }
+  .btn-pick:active { transform: scale(0.98); }
+
+  /* ── FILE CARDS ── */
+  .file-list { margin-top: 14px; display: flex; flex-direction: column; gap: 10px; }
+  .file-card {
+    background: var(--bg-2); border-radius: var(--r);
+    padding: 14px 16px; display: flex; align-items: center; gap: 14px;
+    border: 1px solid var(--border); animation: slideIn 0.25s ease;
+    box-shadow: var(--shadow); transition: box-shadow 0.2s;
+  }
+  .file-card:hover { box-shadow: 0 4px 20px rgba(15,23,42,0.08); }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .file-icon {
+    width: 42px; height: 42px; flex-shrink: 0;
+    background: var(--bg-3); border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; border: 1px solid var(--border);
+  }
+  .file-info { flex: 1; min-width: 0; }
+  .file-name { font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .file-meta { font-size: 11px; color: var(--text-3); margin-top: 3px; }
+  .file-stats { display: flex; gap: 6px; margin-top: 7px; flex-wrap: wrap; }
+  .stat-pill {
+    font-size: 10px; font-weight: 600; padding: 3px 9px; border-radius: 20px;
+    display: flex; align-items: center; gap: 4px;
+  }
+  .stat-pill.notes { background: rgba(37,99,235,0.08);  color: #2563eb; border: 1px solid rgba(37,99,235,0.15); }
+  .stat-pill.hl    { background: rgba(37,99,235,0.10);  color: var(--gold); border: 1px solid var(--border-2); }
+  .stat-pill.bk    { background: rgba(26,122,74,0.10);  color: var(--ok);   border: 1px solid rgba(5,150,105,0.15); }
+  .stat-pill.tag   { background: rgba(109,40,217,0.08); color: #7c3aed;    border: 1px solid rgba(109,40,217,0.12); }
+  .file-remove {
+    background: none; border: none; color: var(--text-3);
+    font-size: 16px; cursor: pointer; padding: 6px; border-radius: 8px;
+    line-height: 1; transition: all 0.15s;
+  }
+  .file-remove:hover { color: var(--err); background: var(--err-dim); }
+  .file-card.loading .file-icon { animation: pulse 1s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  /* ── BUTTONS ── */
+  .btn {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    border: none; border-radius: var(--r-sm); cursor: pointer;
+    font-size: 15px; font-weight: 600; padding: 15px 24px;
+    transition: all 0.2s; width: 100%; margin-top: 14px;
+    -webkit-tap-highlight-color: transparent; letter-spacing: -0.2px;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--gold), var(--amber));
+    color: #fff; box-shadow: 0 10px 24px rgba(37,99,235,0.20);
+  }
+  .btn-primary:hover { box-shadow: 0 14px 34px rgba(37,99,235,0.26); transform: translateY(-1px); }
+  .btn-primary:active { transform: scale(0.98); }
+  .btn-primary:disabled { opacity: 0.35; cursor: not-allowed; transform: none; box-shadow: none; }
+  .btn-ghost {
+    background: var(--bg-2); color: var(--text-2);
+    border: 1px solid var(--border-2); margin-top: 10px;
+    box-shadow: var(--shadow);
+  }
+  .btn-ghost:hover { color: var(--text); border-color: var(--gold); background: var(--gold-dim); }
+  .btn-success {
+    background: linear-gradient(135deg, #1a7a4a, #22c55e);
+    color: #fff; box-shadow: 0 4px 16px rgba(5,150,105,0.22);
+  }
+  .btn-success:hover { box-shadow: 0 6px 24px rgba(5,150,105,0.28); transform: translateY(-1px); }
+
+  /* ── NOTICE ── */
+  .notice {
+    border-radius: var(--r-sm); padding: 12px 14px; font-size: 12px;
+    line-height: 1.6; margin-top: 12px; display: flex; gap: 10px; align-items: flex-start;
+  }
+  .notice.info { background: rgba(37,99,235,0.06); color: #1d4ed8; border-left: 2px solid rgba(37,99,235,0.25); }
+  .notice.warn { background: var(--warn-dim); color: var(--warn); border-left: 2px solid rgba(217,119,6,0.30); }
+  .notice.ok   { background: var(--ok-dim);   color: var(--ok);   border-left: 2px solid rgba(5,150,105,0.28); }
+
+  /* ── FAQ ── */
+  .faq-wrap { margin-top: 0; margin-bottom: 16px; display: flex; flex-direction: column; gap: 8px; }
+  .faq-item {
+    background: var(--bg-2); border-radius: var(--r);
+    border: 1px solid var(--border); padding: 14px 16px;
+    box-shadow: var(--shadow); transition: box-shadow 0.2s;
+  }
+  .faq-item:hover { box-shadow: 0 4px 20px rgba(15,23,42,0.07); }
+  .faq-q { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 5px; }
+  .faq-a { font-size: 13px; color: var(--text-2); line-height: 1.6; }
+  .faq-a em { color: var(--gold); font-style: normal; font-weight: 600; }
+
+  /* ── DIFF SUMMARY ── */
+  .diff-summary {
+    background: var(--bg-2); border-radius: var(--r);
+    padding: 4px 16px; border: 1px solid var(--border);
+    margin-bottom: 14px; box-shadow: var(--shadow);
+  }
+  .diff-row {
+    display: flex; align-items: center;
+    padding: 12px 0; border-bottom: 1px solid var(--border); gap: 10px;
+  }
+  .diff-row:last-child { border-bottom: none; }
+  .diff-label { font-size: 13px; color: var(--text-2); flex: 1; }
+  .diff-counts { display: flex; gap: 7px; align-items: center; }
+  .diff-badge {
+    font-size: 11px; font-weight: 700; min-width: 38px; text-align: center;
+    padding: 4px 10px; border-radius: 20px;
+  }
+  .diff-badge.a   { background: rgba(37,99,235,0.08); color: #2563eb; }
+  .diff-badge.b   { background: rgba(192,48,42,0.08); color: var(--err); }
+  .diff-badge.new { background: var(--ok-dim); color: var(--ok); }
+
+  /* ── CONFLITTI ── */
+  .conflict-item {
+    background: var(--bg-2); border-radius: var(--r);
+    border: 1px solid rgba(217,119,6,0.20);
+    margin-bottom: 10px; overflow: hidden; animation: slideIn 0.2s ease;
+    box-shadow: var(--shadow);
+  }
+  .conflict-header {
+    background: rgba(217,119,6,0.07); padding: 10px 14px;
+    display: flex; align-items: center; gap: 10px;
+    border-bottom: 1px solid rgba(217,119,6,0.12);
+  }
+  .conflict-tag {
+    font-size: 9px; font-weight: 700; letter-spacing: 1px;
+    background: var(--warn-dim); color: var(--warn);
+    padding: 3px 9px; border-radius: 20px; text-transform: uppercase;
+  }
+  .conflict-ref { font-size: 13px; color: var(--text); flex: 1; font-weight: 500; }
+  .conflict-body { padding: 12px 14px; display: flex; gap: 10px; }
+  .conflict-side {
+    flex: 1; background: var(--bg-3); border-radius: var(--r-sm);
+    padding: 10px 12px; border: 1px solid var(--border);
+  }
+  .conflict-side-label {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.5px; margin-bottom: 6px;
+  }
+  .side-a .conflict-side-label { color: #2563eb; }
+  .side-b .conflict-side-label { color: var(--err); }
+  .conflict-text { font-size: 12px; color: var(--text-2); line-height: 1.5; word-break: break-word; }
+  .conflict-actions { display: flex; gap: 7px; padding: 0 14px 14px; flex-wrap: wrap; }
+  .conflict-choice {
+    flex: 1; min-width: 70px; background: var(--bg-3); color: var(--text-3);
+    border: 1px solid var(--border); border-radius: var(--r-xs);
+    padding: 9px 6px; font-size: 11px; font-weight: 600;
+    text-align: center; cursor: pointer; transition: all 0.15s; font-family: inherit;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .conflict-choice:hover { border-color: var(--gold); color: var(--text); }
+  .conflict-choice.selected-A    { border-color: #2563eb; background: rgba(37,99,235,0.08); color: #2563eb; }
+  .conflict-choice.selected-B    { border-color: var(--err); background: var(--err-dim); color: var(--err); }
+  .conflict-choice.selected-BOTH { border-color: var(--gold); background: var(--gold-dim); color: var(--gold); }
+
+  /* ── PROGRESS ── */
+  .progress-wrap {
+    background: var(--bg-3); border-radius: 20px; height: 4px;
+    overflow: hidden; margin: 14px 0;
+  }
+  .progress-bar {
+    height: 100%; background: linear-gradient(90deg, var(--gold), var(--amber));
+    border-radius: 20px; transition: width 0.3s ease; width: 0%;
+  }
+  .progress-label { font-size: 12px; color: var(--text-3); text-align: center; margin-top: 6px; }
+
+  /* ── RISULTATO ── */
+  .result-hero {
+    text-align: center; padding: 32px 20px 24px;
+    background: var(--bg-2); border-radius: var(--r);
+    border: 1px solid var(--border); margin-bottom: 16px;
+    box-shadow: var(--shadow-lg); position: relative; overflow: hidden;
+  }
+  .result-hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(192,122,0,0.05), transparent);
+    pointer-events: none;
+  }
+  .result-icon { font-size: 52px; margin-bottom: 12px; display: block; }
+  .result-title { font-size: 24px; font-weight: 700; color: var(--text); margin-bottom: 6px; letter-spacing: -0.5px; }
+  .result-sub { font-size: 13px; color: var(--text-2); }
+  .result-stats { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; margin-top: 20px; }
+  #validation-badge { border-radius: 10px; padding: 10px 14px; font-size: .9rem; }
+  #validation-badge .badge-ok { color: #15803d; font-weight: 600; }
+  #validation-badge .badge-warn { color: #b45309; font-weight: 600; display: block; margin-bottom: 6px; }
+  #validation-badge .val-warnings { margin: 4px 0 0 16px; padding: 0; color: #92400e; font-size: .85rem; }
+  #validation-badge:has(.badge-ok) { background: #f0fdf4; border: 1px solid #bbf7d0; }
+  #validation-badge:has(.badge-warn) { background: #fffbeb; border: 1px solid #fde68a; }
+  .result-stat {
+    background: var(--bg-3); border-radius: var(--r-sm);
+    padding: 14px; text-align: center; border: 1px solid var(--border);
+  }
+  .result-stat-n { font-size: 28px; font-weight: 800; color: var(--gold); font-variant-numeric: tabular-nums; line-height: 1; }
+  .result-stat-l { font-size: 11px; color: var(--text-3); margin-top: 4px; }
+
+  /* ── LOG ── */
+  .log-wrap {
+    background: var(--bg-3); border-radius: var(--r); border: 1px solid var(--border);
+    padding: 12px 14px; max-height: 180px; overflow-y: auto; margin-top: 14px;
+  }
+  .log-entry { font-size: 11px; padding: 3px 0; display: flex; gap: 8px; font-family: 'SF Mono','Consolas',monospace; }
+  .log-entry.ok   .log-msg { color: var(--ok); }
+  .log-entry.warn .log-msg { color: var(--warn); }
+  .log-entry.err  .log-msg { color: var(--err); }
+  .log-entry.info .log-msg { color: #2563eb; }
+  .log-time { color: var(--text-3); flex-shrink: 0; }
+  .log-msg  { color: var(--text-2); }
+
+  /* ── HELP ── */
+  .help-section-title {
+    font-size: 10px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1.2px; color: var(--text-3); margin: 20px 0 10px;
+  }
+  .help-step {
+    display: flex; gap: 14px; align-items: flex-start;
+    background: var(--bg-2); border-radius: var(--r);
+    border: 1px solid var(--border); padding: 16px; margin-bottom: 10px;
+    box-shadow: var(--shadow); transition: box-shadow 0.2s;
+  }
+  .help-step:hover { box-shadow: 0 4px 20px rgba(15,23,42,0.07); }
+  .help-step-n {
+    width: 30px; height: 30px; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--gold), var(--amber));
+    color: #fff; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 800; box-shadow: 0 2px 8px rgba(37,99,235,0.20);
+  }
+  .help-step-text { flex: 1; }
+  .help-step-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .help-step-desc  { font-size: 12px; color: var(--text-2); line-height: 1.6; }
+  .help-step-desc em { color: var(--gold); font-style: normal; font-weight: 600; }
+
+  /* ── INSTALL BANNERS ── */
+  /* ── PWA INSTALL POPUP ── */
+  #pwa-overlay {
+    position: fixed; inset: 0; background: rgba(15,23,42,0.35);
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    z-index: 998; display: flex; align-items: flex-end; justify-content: center;
+    padding-bottom: 20px; animation: fadeInOverlay 0.3s ease;
+  }
+  #pwa-popup {
+    background: var(--bg-2); border: 1px solid var(--border-2);
+    border-radius: 24px 24px 18px 18px; padding: 28px 24px 22px;
+    width: 100%; max-width: 420px; margin: 0 16px;
+    text-align: center; position: relative;
+    animation: slideUpPopup 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    box-shadow: 0 -4px 40px rgba(15,23,42,0.10), var(--shadow-lg);
+  }
+  .pwa-icon { font-size: 44px; display: block; margin-bottom: 10px; }
+  .pwa-title { font-size: 19px; font-weight: 700; color: var(--text); margin-bottom: 6px; letter-spacing: -0.3px; }
+  .pwa-sub { font-size: 13px; color: var(--text-2); line-height: 1.55; margin-bottom: 18px; }
+  .pwa-sub em { color: var(--gold); font-style: normal; font-weight: 600; }
+  .pwa-steps { text-align: left; background: var(--bg-3); border-radius: var(--r-sm); padding: 14px 16px; margin-bottom: 18px; font-size: 13px; color: var(--text-2); line-height: 1.9; }
+  .pwa-steps strong { color: var(--text); }
+  .btn-pwa-install {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    background: linear-gradient(135deg, var(--gold), var(--amber));
+    color: #fff; border: none; border-radius: var(--r-sm);
+    font-size: 15px; font-weight: 700; padding: 15px 24px; width: 100%;
+    cursor: pointer; margin-bottom: 10px;
+    box-shadow: 0 4px 16px rgba(37,99,235,0.22); transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-pwa-install:hover { box-shadow: 0 6px 24px rgba(37,99,235,0.28); transform: translateY(-1px); }
+  .btn-pwa-install:active { transform: scale(0.98); }
+  .pwa-dismiss {
+    position: absolute; top: 14px; right: 14px;
+    background: var(--bg-3); border: 1px solid var(--border);
+    color: var(--text-2); font-size: 14px; cursor: pointer;
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 10; transition: all 0.15s; -webkit-tap-highlight-color: transparent;
+  }
+  .pwa-dismiss:hover { background: var(--bg-4); color: var(--text); }
+  .btn-pwa-later {
+    background: none; border: none; color: var(--text-3); font-size: 13px;
+    cursor: pointer; padding: 8px; width: 100%; text-align: center;
+    transition: color 0.15s; -webkit-tap-highlight-color: transparent;
+  }
+  .btn-pwa-later:hover { color: var(--text); }
+
+  /* ── APPLICA TUTTO ── */
+  .btn-apply-all {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    background: var(--gold-dim); color: var(--gold);
+    border: 1.5px solid var(--border-2); border-radius: var(--r-sm);
+    font-size: 13px; font-weight: 700; padding: 11px 18px;
+    cursor: pointer; width: 100%; margin-bottom: 12px;
+    transition: all 0.2s; -webkit-tap-highlight-color: transparent;
+  }
+  .btn-apply-all:hover { background: var(--gold); color: #fff; border-color: var(--gold); }
+  .btn-apply-all:active { transform: scale(0.98); }
+
+  /* ── SPINNER ── */
+  .spinner {
+    display: inline-block; width: 18px; height: 18px;
+    border: 2px solid rgba(37,99,235,0.18);
+    border-top-color: var(--gold); border-radius: 50%;
+    animation: spin 0.7s linear infinite; flex-shrink: 0;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── BARRA CARICAMENTO FILE ── */
+  .file-loading-bar {
+    display: none;
+    background: var(--bg-2); border: 1px solid var(--border-2);
+    border-radius: var(--r); padding: 14px 16px; margin-top: 12px;
+    box-shadow: var(--shadow); animation: slideIn 0.2s ease;
+  }
+  .file-loading-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .file-loading-name {
+    font-size: 12px; font-weight: 600; color: var(--text);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1;
+  }
+  .file-loading-pct {
+    font-size: 12px; font-weight: 700; color: var(--gold);
+    flex-shrink: 0; min-width: 36px; text-align: right;
+  }
+  .file-loading-stage { font-size: 11px; color: var(--text-3); margin-top: 6px; }
+  .file-loading-bar .progress-wrap { margin: 0; }
+
+  /* ── POPUP CAFFÈ ── */
+  #coffee-overlay {
+    position: fixed; inset: 0; background: rgba(15,23,42,0.35);
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    z-index: 999; display: flex; align-items: flex-end; justify-content: center;
+    padding-bottom: 20px; animation: fadeInOverlay 0.3s ease;
+  }
+  @keyframes fadeInOverlay { from{opacity:0} to{opacity:1} }
+  #coffee-popup {
+    background: var(--bg-2); border: 1px solid var(--border-2);
+    border-radius: 24px 24px 18px 18px; padding: 28px 24px 22px;
+    width: 100%; max-width: 420px; margin: 0 16px;
+    text-align: center; position: relative;
+    animation: slideUpPopup 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    box-shadow: 0 -4px 40px rgba(15,23,42,0.10), var(--shadow-lg);
+  }
+  @keyframes slideUpPopup {
+    from { transform: translateY(100px); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
+  }
+  .coffee-emoji { font-size: 48px; display: block; margin-bottom: 12px; }
+  .coffee-title { font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 8px; letter-spacing: -0.3px; }
+  .coffee-sub { font-size: 13px; color: var(--text-2); line-height: 1.6; margin-bottom: 20px; }
+  .coffee-sub em { color: var(--gold); font-style: normal; font-weight: 600; }
+  .btn-coffee {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    background: linear-gradient(135deg, var(--gold), var(--amber));
+    color: #fff; border: none; border-radius: var(--r-sm);
+    font-size: 15px; font-weight: 700; padding: 15px 24px; width: 100%;
+    cursor: pointer; margin-bottom: 10px; text-decoration: none;
+    box-shadow: 0 4px 16px rgba(37,99,235,0.22); transition: all 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .btn-coffee:hover { box-shadow: 0 6px 24px rgba(37,99,235,0.28); transform: translateY(-1px); }
+  .btn-coffee:active { transform: scale(0.98); }
+  .btn-coffee-done {
+    background: none; border: none; color: var(--text-3); font-size: 13px;
+    cursor: pointer; padding: 8px; width: 100%; text-align: center;
+    transition: color 0.15s; -webkit-tap-highlight-color: transparent;
+  }
+  .btn-coffee-done:hover { color: var(--text); }
+  .coffee-dismiss {
+    position: absolute; top: 14px; right: 14px;
+    background: var(--bg-3); border: 1px solid var(--border);
+    color: var(--text-2); font-size: 14px; cursor: pointer;
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 10; transition: all 0.15s; -webkit-tap-highlight-color: transparent;
+  }
+  .coffee-dismiss:hover { background: var(--bg-4); color: var(--text); }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--bg-4); border-radius: 2px; }
+
+  /* ── RESPONSIVE ── */
+  @media (prefers-reduced-motion: reduce) {
+    .sync-hub, .packet { animation: none; }
+    .packet { opacity: 0.75; }
+  }
+  /* ── DEBUG PANEL (solo beta test) ── */
+  #debug-panel {
+    display: none;
+    width: 100%; max-width: 560px;
+    margin: 14px auto 0; padding: 0 16px;
+  }
+  .debug-box {
+    background: #0a0e14; color: #e0e6ed;
+    border: 2px solid #f59e0b;
+    border-radius: var(--r);
+    padding: 16px;
+    font-family: 'SF Mono','Consolas',monospace;
+    font-size: 11px; line-height: 1.6;
+    max-height: 70vh; overflow-y: auto;
+  }
+  .debug-box h3 {
+    color: #f59e0b; font-size: 13px; margin: 14px 0 6px;
+    border-bottom: 1px solid #2a2f38; padding-bottom: 4px;
+  }
+  .debug-box h3:first-child { margin-top: 0; }
+  .debug-file-block {
+    background: #131820; border-radius: 8px;
+    padding: 10px 12px; margin-bottom: 10px;
+    border-left: 3px solid #3b82f6;
+  }
+  .debug-note {
+    background: #131820; border-radius: 6px;
+    padding: 8px 10px; margin-bottom: 6px;
+    border-left: 3px solid #475569;
+  }
+  .debug-note.unique-a { border-left-color: #3b82f6; }
+  .debug-note.unique-b { border-left-color: #f43f5e; }
+  .debug-note.conflict { border-left-color: #f59e0b; }
+  .debug-note.merged   { border-left-color: #22c55e; }
+  .debug-label {
+    display: inline-block; font-size: 9px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    padding: 1px 6px; border-radius: 10px; margin-bottom: 4px;
+  }
+  .debug-label.a    { background: #1e3a5f; color: #7eb8f7; }
+  .debug-label.b    { background: #3a1020; color: #f7a0a8; }
+  .debug-label.conf { background: #3a2e10; color: #f7c97e; }
+  .debug-label.ok   { background: #0a2a18; color: #7ef7a8; }
+  .debug-guid { color: #64748a; font-size: 10px; }
+  .debug-title { color: #fff; font-weight: 700; margin: 4px 0 2px; }
+  .debug-content { color: #c0c8d2; white-space: pre-wrap; word-break: break-word; }
+  .debug-empty { color: #475569; font-style: italic; padding: 8px 0; }
+  .debug-close-btn {
+    background: #f59e0b; color: #000; border: none;
+    border-radius: 8px; padding: 8px 16px; font-size: 12px;
+    font-weight: 700; cursor: pointer; margin-top: 10px; width: 100%;
+  }
+  .debug-stat-row {
+    display: flex; justify-content: space-between;
+    padding: 3px 0; border-bottom: 1px dashed #1e242c;
+  }
+</style>
+
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="app-header">
+  <div class="app-logo">📖</div>
+  <div>
+    <div class="app-title">UniNote</div>
+    <div class="app-subtitle">Unisci backup JW Library · dati in locale</div>
+  </div>
+  <div class="header-badge">🔒 Dati al sicuro</div>
+  <button class="btn-help" id="btn-debug" title="Debug (solo beta test)">🔧</button>
+  <button class="btn-help" id="btn-help" title="Aiuto">?</button>
+</header>
+
+<!-- DEBUG PANEL (solo beta test) -->
+<div id="debug-panel">
+  <div class="debug-box" id="debug-content">
+    <div class="debug-empty">Carica i file per vedere i dati diagnostici qui.</div>
+  </div>
+  <button class="debug-close-btn" id="debug-close">Chiudi pannello debug</button>
+</div>
+
+<!-- PWA INSTALL BANNER (Android/Windows) -->
+<!-- PWA INSTALL POPUP -->
+<div id="pwa-overlay" style="display:none">
+  <div id="pwa-popup">
+    <button class="pwa-dismiss" id="pwa-dismiss" title="Chiudi">✕</button>
+    <!-- Android / Windows / Desktop -->
+    <div id="pwa-android">
+      <span class="pwa-icon">📲</span>
+      <div class="pwa-title">Installa UniNote</div>
+      <div class="pwa-sub">Aggiungila alla schermata Home per averla sempre pronta. <em>Richiede connessione solo al primo avvio per caricare le librerie.</em></div>
+      <button class="btn-pwa-install" id="pwa-install-btn">⬇️ &nbsp;Installa l'app</button>
+      <button class="btn-pwa-later" id="pwa-later">Non adesso</button>
+    </div>
+    <!-- iOS -->
+    <div id="pwa-ios" style="display:none">
+      <span class="pwa-icon">📲</span>
+      <div class="pwa-title">Installa su iPhone</div>
+      <div class="pwa-sub">Aggiungi UniNote alla schermata Home per averla a portata di mano. <em>Richiede connessione al primo avvio.</em></div>
+      <div class="pwa-steps">
+        1. Tocca <strong>Condividi</strong> ↑ in fondo a Safari<br>
+        2. Scorri e tocca <strong>"Aggiungi a schermata Home"</strong><br>
+        3. Conferma con <strong>Aggiungi</strong>
+      </div>
+      <button class="btn-pwa-later" id="pwa-ios-later">Ho capito, grazie!</button>
+    </div>
+  </div>
+</div>
+
+<!-- STEP INDICATOR -->
+<div class="steps-bar" id="steps-bar">
+  <div class="step-item active" data-step="0">
+    <div class="step-dot">1</div>
+    <div class="step-label">Carica</div>
+  </div>
+  <div class="step-item" data-step="1">
+    <div class="step-dot">2</div>
+    <div class="step-label">Confronta</div>
+  </div>
+  <div class="step-item" data-step="2">
+    <div class="step-dot">3</div>
+    <div class="step-label">Scarica</div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main-card">
+
+  <!-- ═══ SCREEN 1: CARICA ═══ -->
+  <div class="screen active" id="screen-load">
+
+    <div class="section-title">File di backup</div>
+
+    <!-- FAQ in cima -->
+    <div class="faq-wrap" style="margin-top:0;margin-bottom:14px">
+      <div class="faq-item">
+        <div class="faq-q">📱 Usi JW Library su più dispositivi?</div>
+        <div class="faq-a">Le tue note e evidenziazioni sono divise tra telefono e tablet? <em>UniNote le unisce in un solo file</em>, senza perdere nulla.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q">🔄 Funziona tra iPhone, Android e Windows?</div>
+        <div class="faq-a">Sì! Il formato di backup è <em>identico su tutti i sistemi</em>. Puoi unire un backup iPhone con uno Android senza problemi.</div>
+      </div>
+    </div>
+    <input type="file" id="file-input" accept=".jwlibrary" multiple="" aria-label="Seleziona file di backup JW Library" style="position:absolute;left:-9999px;opacity:0;width:1px;height:1px;">
+
+    <div class="drop-zone" id="drop-zone" role="button" tabindex="0" aria-label="Seleziona o trascina file di backup JW Library">
+      <div class="sync-animation" aria-hidden="true">
+        <div class="sync-device sync-phone">📱</div>
+        <div class="sync-device sync-pc">💻</div>
+        <div class="sync-device sync-tablet"></div>
+        <span class="packet packet-in packet-phone">2</span>
+        <span class="packet packet-in packet-pc">1</span>
+        <span class="packet packet-in packet-tablet">3</span>
+        <div class="sync-hub"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iYmciIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMjU2M2ViIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzE0YjhhNiIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CiAgPHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSIxMTUiIGZpbGw9InVybCgjYmcpIi8+CiAgPHBhdGggZD0iTTYwLDY0IEwxNDgsNjQgTDE0OCwyOTYgUTE0OCwzNjggMjU2LDM2OCBRMzY0LDM2OCAzNjQsMjk2IEwzNjQsNjQgTDQ1Miw2NCBMNDUyLDI5NiBRNDUyLDQyMiAyNTYsNDIyIFE2MCw0MjIgNjAsMjk2IFoiIGZpbGw9IndoaXRlIi8+CiAgPHJlY3QgeD0iMTc1IiB5PSIxOCIgd2lkdGg9IjU0IiBoZWlnaHQ9Ijg2IiByeD0iOSIgZmlsbD0id2hpdGUiIG9wYWNpdHk9IjAuMjIiIHRyYW5zZm9ybT0icm90YXRlKC0yMCAyMDIgNjEpIi8+CiAgPHJlY3QgeD0iMjEwIiB5PSIxMCIgd2lkdGg9IjU0IiBoZWlnaHQ9IjkyIiByeD0iOSIgZmlsbD0id2hpdGUiIG9wYWNpdHk9IjAuNTAiIHRyYW5zZm9ybT0icm90YXRlKC03IDIzNyA1NikiLz4KICA8cmVjdCB4PSIyNTAiIHk9IjgiICB3aWR0aD0iNTQiIGhlaWdodD0iOTIiIHJ4PSI5IiBmaWxsPSJ3aGl0ZSIgb3BhY2l0eT0iMC44MiIgdHJhbnNmb3JtPSJyb3RhdGUoIDcgMjc3IDU0KSIvPgogIDx0ZXh0IHg9IjI1NiIgeT0iNDY2IiBmb250LWZhbWlseT0iSGVsdmV0aWNhIE5ldWUsSGVsdmV0aWNhLEFyaWFsLHNhbnMtc2VyaWYiIGZvbnQtc2l6ZT0iNTQiIGZvbnQtd2VpZ2h0PSI4MDAiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBsZXR0ZXItc3BhY2luZz0iLTAuNSI+dW5pbm90ZTwvdGV4dD4KICA8dGV4dCB4PSIyNTYiIHk9IjQ5MyIgZm9udC1mYW1pbHk9IkhlbHZldGljYSBOZXVlLEhlbHZldGljYSxBcmlhbCxzYW5zLXNlcmlmIiBmb250LXNpemU9IjE2IiBmb250LXdlaWdodD0iNDAwIiBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuNjIpIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBsZXR0ZXItc3BhY2luZz0iMi4zIj5VTklTQ0UgSSBCQUNLVVAgREkgSldMSUJSQVJZPC90ZXh0Pgo8L3N2Zz4=" alt="UniNote" loading="eager"></div>
+        <span class="packet packet-out packet-out-phone">1+2+3</span>
+        <span class="packet packet-out packet-out-pc">1+2+3</span>
+        <span class="packet packet-out packet-out-tablet">1+2+3</span>
+      </div>
+      <div class="drop-title">Backup JW Library da unire</div>
+      <div class="drop-hint">Ogni dispositivo invia il suo backup: UniNote restituisce a tutti lo stesso file unificato (1+2+3).</div>
+      <div class="drop-ext">.JWLIBRARY</div>
+      <label class="btn-pick" id="btn-pick" for="file-input">
+        📁 &nbsp;Seleziona file…
+      </label>
+    </div>
+
+    <!-- BARRA CARICAMENTO FILE -->
+    <div class="file-loading-bar" id="file-loading-bar">
+      <div class="file-loading-header">
+        <div class="spinner"></div>
+        <div class="file-loading-name" id="file-loading-name">—</div>
+        <div class="file-loading-pct" id="file-loading-pct">0%</div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-bar" id="file-loading-progress"></div>
+      </div>
+      <div class="file-loading-stage" id="file-loading-stage">Avvio…</div>
+    </div>
+
+    <div class="file-list" id="file-list"></div>
+
+    <div class="notice info" id="min-notice" style="display:none">
+      ℹ️ Aggiungi almeno 2 file per continuare.
+    </div>
+
+    <button class="btn btn-primary" id="btn-to-compare" disabled="">
+      Confronta i file →
+    </button>
+    <button class="btn btn-ghost" id="btn-clear" style="display:none">
+      Rimuovi tutti
+    </button>
+
+    <div class="notice info" style="margin-top:16px">
+      🔒 I tuoi file non vengono mai inviati a nessun server.<br>
+      Tutto il processo avviene direttamente sul tuo dispositivo.
+    </div>
+  </div>
+
+  <!-- ═══ SCREEN 2: CONFRONTA ═══ -->
+  <div class="screen" id="screen-compare">
+
+    <div class="section-title">Riepilogo contenuti</div>
+    <div class="diff-summary" id="diff-summary">
+      <!-- generato da JS -->
+    </div>
+
+    <div id="conflicts-wrap" style="display:none">
+      <div class="section-title" style="color: #f7c97e">
+        ⚠️ Conflitti da risolvere
+        <span id="conflict-count" style="background:#3a2010;padding:2px 8px;border-radius:20px;font-size:10px;margin-left:6px;color:#f7a07e"></span>
+      </div>
+      <div class="notice warn" style="margin-top:0;margin-bottom:10px">
+        Queste note esistono su entrambi i dispositivi con contenuto diverso. Scegli cosa fare con ciascuna.
+      </div>
+      <button class="btn-apply-all" id="btn-apply-all-merge" type="button">
+        🔗 Unisci testo in tutti i conflitti
+      </button>
+      <div id="conflict-list"></div>
+    </div>
+
+    <div id="no-conflicts-notice" class="notice ok" style="display:none">
+      ✅ Nessun conflitto rilevato. Puoi procedere direttamente all'unione.
+    </div>
+
+    <button class="btn btn-primary" id="btn-merge">
+      ✦ Unisci e scarica
+    </button>
+    <button class="btn btn-ghost" id="btn-back-load">
+      ← Torna ai file
+    </button>
+  </div>
+
+  <!-- ═══ SCREEN 3: ELABORAZIONE ═══ -->
+  <div class="screen" id="screen-merging">
+    <div style="text-align:center;padding:40px 20px">
+      <div style="font-size:48px;margin-bottom:16px">⚙️</div>
+      <div style="font-family:Georgia,serif;font-size:20px;color:var(--paper);margin-bottom:8px">
+        Unione in corso…
+      </div>
+      <div class="progress-wrap"><div class="progress-bar" id="progress-bar"></div></div>
+      <div class="progress-label" id="progress-label" role="status" aria-live="polite">Avvio…</div>
+    </div>
+    <div class="log-wrap" id="log-wrap" role="log" aria-live="polite" aria-label="Log operazioni"><div class="log-entry info"><span class="log-time">16:52:02</span><span class="log-msg">Motore SQLite pronto</span></div></div>
+  </div>
+
+  <!-- ═══ SCREEN 4: RISULTATO ═══ -->
+  <div class="screen" id="screen-result">
+
+    <div class="result-hero">
+      <span class="result-icon">✅</span>
+      <div class="result-title">Unione completata!</div>
+      <div class="result-sub">Il file è pronto da ripristinare in JW Library</div>
+      <div class="result-stats" id="result-stats"></div>
+    </div>
+
+    <div id="validation-badge" style="display:none;margin-bottom:10px"></div>
+
+    <button class="btn btn-success" id="btn-download">
+      ⬇ Scarica il file unito
+    </button>
+
+    <div class="notice info" style="margin-top:14px">
+      <div>
+        <strong>Come ripristinare in JW Library:</strong><br>
+        Apri JW Library → icona Nuvola ☁️ → <em>Ripristina backup</em> → seleziona il file scaricato
+      </div>
+    </div>
+
+    <button class="btn btn-ghost" id="btn-restart">
+      Nuova unione
+    </button>
+  </div>
+
+  <!-- ═══ SCREEN AIUTO ═══ -->
+  <div class="screen" id="screen-help">
+    <div class="help-section-title">Come usare UniNote</div>
+
+    <div class="help-step">
+      <div class="help-step-n">1</div>
+      <div class="help-step-text">
+        <div class="help-step-title">Crea il backup su ogni dispositivo</div>
+        <div class="help-step-desc">Apri JW Library → icona <em>☁️ Nuvola</em> → <em>Crea backup</em> → salva il file <em>.jwlibrary</em>. Fallo su tutti i dispositivi che vuoi sincronizzare.</div>
+      </div>
+    </div>
+
+    <div class="help-step">
+      <div class="help-step-n">2</div>
+      <div class="help-step-text">
+        <div class="help-step-title">Carica i file in UniNote</div>
+        <div class="help-step-desc">Torna qui e tocca <em>Seleziona file…</em> Carica almeno 2 file .jwlibrary. Vedrai subito quante note, evidenziazioni e segnalibri ha ciascuno.</div>
+      </div>
+    </div>
+
+    <div class="help-step">
+      <div class="help-step-n">3</div>
+      <div class="help-step-text">
+        <div class="help-step-title">Confronta e risolvi i conflitti</div>
+        <div class="help-step-desc">Se la stessa nota è stata modificata su due dispositivi diversi, UniNote te la mostra. Puoi scegliere: <em>tieni A, tieni B, tieni entrambe</em> o <em>unisci il testo</em>.</div>
+      </div>
+    </div>
+
+    <div class="help-step">
+      <div class="help-step-n">4</div>
+      <div class="help-step-text">
+        <div class="help-step-title">Unisci e scarica</div>
+        <div class="help-step-desc">Tocca <em>Unisci e scarica</em>. UniNote crea un file unico completo, senza duplicati, con tutto il meglio di ogni dispositivo.</div>
+      </div>
+    </div>
+
+    <div class="help-step">
+      <div class="help-step-n">5</div>
+      <div class="help-step-text">
+        <div class="help-step-title">Ripristina in JW Library</div>
+        <div class="help-step-desc">Apri JW Library → icona <em>☁️ Nuvola</em> → <em>Ripristina backup</em> → seleziona il file scaricato. Fatto!</div>
+      </div>
+    </div>
+
+    <div class="help-section-title">Domande frequenti</div>
+
+    <div class="faq-item" style="margin-bottom:8px">
+      <div class="faq-q">🔒 I miei file vengono caricati su internet?</div>
+      <div class="faq-a">No. UniNote funziona <em>interamente sul tuo dispositivo</em>. I tuoi dati non escono mai dal browser.</div>
+    </div>
+    <div class="faq-item" style="margin-bottom:8px">
+      <div class="faq-q">📱 Funziona tra iPhone, Android e Windows?</div>
+      <div class="faq-a">Sì! Il formato .jwlibrary è <em>identico su tutti i sistemi</em>. Puoi unire backup di dispositivi diversi senza problemi.</div>
+    </div>
+    <div class="faq-item" style="margin-bottom:20px">
+      <div class="faq-q">⚠️ Posso perdere dati?</div>
+      <div class="faq-a">UniNote non modifica mai i file originali. Crea sempre un <em>nuovo file separato</em>. I tuoi backup restano intatti.</div>
+    </div>
+
+    <button class="btn btn-ghost" id="btn-back-help">← Torna all'app</button>
+  </div>
+
+</div><!-- end main-card -->
+
+<!-- POPUP DONAZIONE KO-FI -->
+<div id="coffee-overlay" style="display:none">
+  <div id="coffee-popup">
+    <button class="coffee-dismiss" id="coffee-dismiss" title="Chiudi">✕</button>
+    <span class="coffee-emoji">☕</span>
+    <div class="coffee-title">Un caffè per tenere UniNote sveglio?</div>
+    <div class="coffee-sub">UniNote è gratuito e <em>senza pubblicità</em>. Se ti è utile, un caffè aiuta a mantenerlo attivo.</div>
+    <a class="btn-coffee" id="coffee-link" href="https://ko-fi.com/jocher" target="_blank" rel="noopener">☕ &nbsp;Offri un caffè su Ko-fi</a>
+    <button class="btn-coffee-done" id="coffee-done">Ho già donato 🙏</button>
+  </div>
+</div>
+
+<script>
+window.addEventListener('error', function(e) {
+  alert('⚠️ Errore JS: ' + e.message + '\nRiga: ' + e.lineno);
+});
+window.addEventListener('unhandledrejection', function(e) {
+  alert('⚠️ Errore async: ' + (e.reason?.message || e.reason));
+});
+</script>
+<script>
+/* ════════════════════════════════════════════════════════
+   UniNote — Core Logic
+   Tutto in locale, nessun server, nessun dato trasmesso
+════════════════════════════════════════════════════════ */
+
+// ── STATO ───────────────────────────────────────────────
+const state = {
+  files: [],          // { file, name, info, zip, dbBytes }
+  SQL: null,
+  conflicts: [],      // { key, refA, refB, rowA, rowB, chosen: 'A'|'B' }
+  mergedBytes: null,
+  stats: {}
+};
+
+// ── SQL.JS INIT ──────────────────────────────────────────
+let sqlReady = false;
+const sqlScript = document.createElement('script');
+sqlScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/sql-wasm.js';
+sqlScript.onload = () => {
+  initSqlJs({
+    locateFile: f => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.10.3/${f}`
+  }).then(SQL => {
+    state.SQL = SQL;
+    sqlReady = true;
+    log('info', 'Motore SQLite pronto');
+  }).catch(e => log('err', 'Errore caricamento SQLite: ' + e));
+};
+document.head.appendChild(sqlScript);
+
+// ── UI HELPERS ───────────────────────────────────────────
+const $ = id => document.getElementById(id);
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  $(id).classList.add('active');
+  // aggiorna step
+  const map = { 'screen-load':0, 'screen-compare':1, 'screen-merging':2, 'screen-result':2 };
+  const cur = map[id] ?? 0;
+  document.querySelectorAll('.step-item').forEach((el, i) => {
+    el.classList.remove('active','done');
+    if (i < cur) el.classList.add('done');
+    else if (i === cur) {
+      el.classList.add('active');
+      el.setAttribute('aria-current', 'step');
+    }
+  });
+}
+
+function log(type, msg) {
+  const wrap = $('log-wrap');
+  if (!wrap) return;
+  const t = new Date().toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  const el = document.createElement('div');
+  el.className = `log-entry ${type}`;
+  const timeSpan = document.createElement('span');
+  timeSpan.className = 'log-time';
+  timeSpan.textContent = t;
+  const msgSpan = document.createElement('span');
+  msgSpan.className = 'log-msg';
+  msgSpan.textContent = msg;
+  el.appendChild(timeSpan);
+  el.appendChild(msgSpan);
+  wrap.appendChild(el);
+  wrap.scrollTop = wrap.scrollHeight;
+}
+
+function setProgress(pct, label) {
+  $('progress-bar').style.width = pct + '%';
+  $('progress-label').textContent = label;
+}
+
+// ── FILE MANAGEMENT ─────────────────────────────────────
+const dropZone = $('drop-zone');
+const fileInput = $('file-input');
+
+// Drag & drop sulla zona
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', e => { if (!dropZone.contains(e.relatedTarget)) dropZone.classList.remove('drag-over'); });
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('drag-over');
+  [...e.dataTransfer.files].forEach(addFile);
+});
+
+// Cambio selezione file
+fileInput.addEventListener('change', e => {
+  console.log('[UniNote] change event, files:', e.target.files.length);
+  [...e.target.files].forEach(addFile);
+  fileInput.value = '';
+});
+
+// ── BARRA CARICAMENTO FILE ──────────────────────────────
+function showFileLoading(fileName) {
+  $('file-loading-name').textContent = fileName;
+  $('file-loading-pct').textContent = '0%';
+  $('file-loading-progress').style.width = '0%';
+  $('file-loading-stage').textContent = 'Avvio…';
+  $('file-loading-bar').style.display = '';
+}
+function updateFileLoading(pct, stage) {
+  $('file-loading-progress').style.width = pct + '%';
+  $('file-loading-pct').textContent = Math.round(pct) + '%';
+  $('file-loading-stage').textContent = stage;
+}
+function hideFileLoading() {
+  setTimeout(() => { $('file-loading-bar').style.display = 'none'; }, 700);
+}
+function readFileWithProgress(file, onProgress) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onprogress = e => { if (e.lengthComputable) onProgress((e.loaded / e.total) * 100); };
+    reader.onload = e => resolve(e.target.result);
+    reader.onerror = () => reject(new Error('Impossibile leggere il file'));
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+async function addFile(file) {
+  console.log('[UniNote] addFile:', file.name, '| JSZip:', typeof JSZip, '| sqlReady:', sqlReady);
+  if (typeof JSZip === 'undefined') {
+    alert('Errore: libreria JSZip non caricata.\nRicarica la pagina (Ctrl+Shift+R) e riprova.');
+    return;
+  }
+  if (!file.name.toLowerCase().endsWith('.jwlibrary')) {
+    alert('Solo file .jwlibrary sono supportati.');
+    return;
+  }
+  if (state.files.find(f => f.name === file.name)) {
+    alert(`"${file.name}" è già stato aggiunto.`);
+    return;
+  }
+
+  showFileLoading(file.name);
+
+  const idx = state.files.length;
+  state.files.push({ file, name: file.name, info: null });
+  renderFileCard(idx, { loading: true });
+
+  try {
+    // Fase 1: lettura file con progress reale (0–40%)
+    updateFileLoading(2, 'Lettura file in corso…');
+    const buf = await readFileWithProgress(file, pct => {
+      updateFileLoading(pct * 0.4, `Lettura file… ${Math.round(pct)}%`);
+    });
+
+    // Fase 2: decompressione ZIP (40–65%)
+    updateFileLoading(42, 'Decompressione archivio…');
+    const zip = await JSZip.loadAsync(buf);
+
+    // Fase 3: estrazione DB e manifest (65–80%)
+    updateFileLoading(65, 'Estrazione database…');
+    const dbFile = zip.file('userData.db');
+    if (!dbFile) throw new Error('File non valido: userData.db mancante');
+
+    const [dbBytes, manifestStr] = await Promise.all([
+      dbFile.async('uint8array'),
+      zip.file('manifest.json')?.async('string') ?? Promise.resolve('{}')
+    ]);
+
+    const manifest = JSON.parse(manifestStr || '{}');
+
+    // Fase 4: analisi SQLite (80–100%)
+    updateFileLoading(82, 'Analisi database…');
+    const info = await getDbInfoFast(dbBytes, manifest);
+
+    updateFileLoading(100, '✓ File analizzato');
+    state.files[idx] = { file, name: file.name, info, zip, dbBytes };
+    renderFileCard(idx, { loading: false });
+    hideFileLoading();
+  } catch(e) {
+    try {
+      state.files.splice(idx, 1);
+      renderAllCards();
+    } catch(_) {}
+    hideFileLoading();
+    alert('Errore nel file: ' + (e?.message || e));
+  }
+  try { updateLoadUI(); } catch(_) {}
+}
+
+async function getDbInfoFast(dbBytes, manifest) {
+  if (!sqlReady) await waitSQL();
+
+  const db = new state.SQL.Database(dbBytes);
+
+  // Una query sola per leggere tutte le tabelle e i conteggi
+  const tblMap = {};
+  db.exec("SELECT name FROM sqlite_master WHERE type='table'")
+    .flatMap(r => r.values.map(v => v[0]))
+    .forEach(t => tblMap[t.toLowerCase()] = t);
+
+  // Conta con una sola query UNION ALL invece di 4 query separate
+  const countT = (candidates) => {
+    for (const c of candidates) {
+      if (tblMap[c]) {
+        try {
+          const res = db.exec(`SELECT COUNT(*) FROM "${tblMap[c]}"`);
+          return res[0]?.values[0][0] ?? 0;
+        } catch(e) { return 0; }
+      }
+    }
+    return 0;
+  };
+
+  // Leggi tutte le statistiche con query parallele sulla stessa connessione
+  const notes      = countT(['note','usernote']);
+  const highlights = countT(['usermark','userhighlight','highlight','blockrange']);
+  const bookmarks  = countT(['bookmark','userbookmark']);
+  const tags       = countT(['tag','usertag']);
+
+  db.close();
+
+  // Data dal manifest (non richiede SQL)
+  const ud = manifest.userDataBackup || {};
+  const dateStr = ud.lastModifiedDate || manifest.creationDate || '';
+  let dateDisp = '—';
+  if (dateStr) {
+    try {
+      dateDisp = new Date(dateStr).toLocaleDateString('it-IT',
+        {day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+    } catch(e) { dateDisp = dateStr.slice(0,10); }
+  }
+
+  return { notes, highlights, bookmarks, tags, date: dateDisp, tables: tblMap };
+}
+
+async function getDbInfo(dbBytes, manifest) {
+  return getDbInfoFast(dbBytes, manifest);
+}
+
+function waitSQL() {
+  return new Promise((res, rej) => {
+    const t = setInterval(() => { if (sqlReady) { clearInterval(t); res(); } }, 100);
+    setTimeout(() => { clearInterval(t); rej(new Error('SQLite non disponibile — controlla la connessione')); }, 15000);
+  });
+}
+
+function removeFile(idx) {
+  state.files.splice(idx, 1);
+  renderAllCards();
+  updateLoadUI();
+}
+
+function renderFileCard(idx, { loading }) {
+  const list = $('file-list');
+  // rimuovi vecchia card con stesso idx se esiste
+  const old = list.querySelector(`[data-idx="${idx}"]`);
+  if (old) old.remove();
+
+  const f = state.files[idx];
+  const div = document.createElement('div');
+  div.className = 'file-card' + (loading ? ' loading' : '');
+  div.dataset.idx = idx;
+
+  if (loading) {
+    div.innerHTML = `
+      <div class="file-icon">📄</div>
+      <div class="file-info">
+        <div class="file-name">${escHtml(f.name)}</div>
+        <div class="file-meta">Analisi in corso…</div>
+      </div>
+      <div class="spinner"></div>`;
+  } else {
+    const i = f.info;
+    div.innerHTML = `
+      <div class="file-icon">📗</div>
+      <div class="file-info">
+        <div class="file-name">${escHtml(f.name)}</div>
+        <div class="file-meta">Backup del ${i.date}</div>
+        <div class="file-stats">
+          <span class="stat-pill notes">📝 ${i.notes} note</span>
+          <span class="stat-pill hl">🖍 ${i.highlights} evid.</span>
+          <span class="stat-pill bk">🔖 ${i.bookmarks} segn.</span>
+          ${i.tags > 0 ? `<span class="stat-pill tag">🏷 ${i.tags} tag</span>` : ''}
+        </div>
+      </div>
+      <button class="file-remove" data-remove="${idx}" title="Rimuovi">✕</button>`;
+  }
+  list.appendChild(div);
+}
+
+function renderAllCards() {
+  $('file-list').innerHTML = '';
+  state.files.forEach((f, i) => renderFileCard(i, { loading: f.info === null }));
+}
+
+$('file-list').addEventListener('click', e => {
+  const btn = e.target.closest('[data-remove]');
+  if (btn) removeFile(parseInt(btn.dataset.remove));
+});
+
+function updateLoadUI() {
+  const n = state.files.filter(f => f.info).length;
+  $('btn-to-compare').disabled = n < 2;
+  $('btn-clear').style.display = n > 0 ? '' : 'none';
+  $('min-notice').style.display = n === 1 ? '' : 'none';
+}
+
+$('btn-clear').addEventListener('click', () => {
+  state.files = [];
+  renderAllCards();
+  updateLoadUI();
+});
+
+// ── STEP 2: CONFRONTA ────────────────────────────────────
+$('btn-to-compare').addEventListener('click', () => {
+  buildCompare();
+  showScreen('screen-compare');
+});
+
+$('btn-back-load').addEventListener('click', () => showScreen('screen-load'));
+
+function buildCompare() {
+  // Diff summary
+  const fs = state.files;
+  let html = `
+    <div class="diff-row">
+      <div class="diff-label" style="color:var(--paper);font-weight:600">Tipo</div>
+      ${fs.map((f,i)=>`<div class="diff-badge ${i===0?'a':'b'}" style="min-width:60px">${truncate(f.name,12)}</div>`).join('')}
+      <div class="diff-badge new">Totale unico</div>
+    </div>`;
+
+  const types = [
+    ['📝 Note', 'notes'], ['🖍 Evidenziazioni', 'highlights'],
+    ['🔖 Segnalibri', 'bookmarks'], ['🏷 Tag', 'tags']
+  ];
+
+  for (const [label, key] of types) {
+    const counts = fs.map(f => f.info[key] || 0);
+    const max = Math.max(...counts);
+    html += `
+      <div class="diff-row">
+        <div class="diff-label">${label}</div>
+        ${counts.map((c,i) => `<div class="diff-badge ${i===0?'a':'b'}">${c}</div>`).join('')}
+        <div class="diff-badge new">~${max}</div>
+      </div>`;
+  }
+  $('diff-summary').innerHTML = html;
+
+  // Conflitti (analisi note con stesso GUID ma testo diverso)
+  state.conflicts = findConflicts();
+  if (state.conflicts.length > 0) {
+    $('conflicts-wrap').style.display = '';
+    $('no-conflicts-notice').style.display = 'none';
+    $('conflict-count').textContent = state.conflicts.length;
+    renderConflicts();
+  } else {
+    $('conflicts-wrap').style.display = 'none';
+    $('no-conflicts-notice').style.display = '';
+  }
+}
+
+function findConflicts() {
+  if (state.files.length < 2) return [];
+  if (!sqlReady) return [];
+
+  // Pre-scan su TUTTI i file: raggruppa note per GUID
+  // guidMap: guid → Map<fingerprint → { title, content, fileIndices, fileNames }>
+  const guidMap = new Map();
+  const dbs = [];
+
+  try {
+    for (let fi = 0; fi < state.files.length; fi++) {
+      const f = state.files[fi];
+      const db = new state.SQL.Database(f.dbBytes);
+      dbs.push(db);
+      const tbl = f.info.tables['note'] || f.info.tables['usernote'];
+      if (!tbl) continue;
+      db.exec(`SELECT Guid, Title, Content FROM "${tbl}" WHERE Guid IS NOT NULL`)
+        .flatMap(r => r.values)
+        .forEach(([g, t, c]) => {
+          const title   = t || '';
+          const content = c || '';
+          const fp      = title + ' ' + content;
+          if (!guidMap.has(g)) guidMap.set(g, new Map());
+          const variants = guidMap.get(g);
+          if (!variants.has(fp)) {
+            variants.set(fp, { title, content, fileIndices: [], fileNames: [] });
+          }
+          const v = variants.get(fp);
+          v.fileIndices.push(fi);
+          v.fileNames.push(f.name);
+        });
+    }
+  } catch(e) { /* silent */ }
+  finally { dbs.forEach(d => { try { d.close(); } catch(e2) {} }); }
+
+  // Costruisci conflitti: GUID con 2+ varianti distinte di contenuto
+  const conflicts = [];
+  // Debug data aggiornato per N file
+  state.debugData = {
+    files: state.files.map(f => f.name),
+    conflicts: [], same: [], unique: []
+  };
+
+  for (const [guid, varMap] of guidMap) {
+    const varArr = [...varMap.values()];
+    if (varArr.length === 1) {
+      // stesso contenuto in tutti i file che ce l'hanno
+      state.debugData.same.push({ guid, title: varArr[0].title, content: varArr[0].content });
+    } else {
+      // varianti diverse → conflitto
+      // Ordina: prima la variante del file 0 (base), poi le altre in ordine di primo fileIndex
+      varArr.sort((a, b) => a.fileIndices[0] - b.fileIndices[0]);
+      const conflict = {
+        guid,
+        title: varArr[0].title || varArr.find(v => v.title)?.title || 'Nota senza titolo',
+        variants: varArr,   // [{ title, content, fileIndices, fileNames }]
+        chosen: 0           // indice in variants (0 = tieni versione base/file0)
+      };
+      // Compat backward: c.a = variants[0], c.b = variants[1]
+      Object.defineProperty(conflict, 'a', { get: () => conflict.variants[0] });
+      Object.defineProperty(conflict, 'b', { get: () => conflict.variants[1] });
+      conflicts.push(conflict);
+      state.debugData.conflicts.push(conflict);
+    }
+  }
+
+  // Unique per file (GUID presente in un solo file)
+  for (const [guid, varMap] of guidMap) {
+    const varArr = [...varMap.values()];
+    const allIndices = varArr.flatMap(v => v.fileIndices);
+    const uniqueFiles = [...new Set(allIndices)];
+    if (uniqueFiles.length === 1) {
+      state.debugData.unique.push({
+        guid, fileIndex: uniqueFiles[0],
+        fileName: state.files[uniqueFiles[0]].name,
+        title: varArr[0].title, content: varArr[0].content
+      });
+    }
+  }
+
+  return conflicts;
+}
+
+function renderDebugPanel() {
+  const el = $('debug-content');
+  if (!el) return;
+  const d = state.debugData;
+  if (!d) {
+    el.innerHTML = '<div class="debug-empty">Nessun dato ancora. Carica e confronta i file.</div>';
+    return;
+  }
+
+  const escD = s => escHtml(String(s ?? ''));
+  let html = '';
+
+  html += `<h3>📊 Riepilogo note</h3>`;
+  // Riepilogo N-file
+  if (d.files && d.files.length) {
+    d.files.forEach((fn, i) => {
+      const uq = (d.unique || []).filter(u => u.fileIndex === i).length;
+      html += `<div class="debug-stat-row"><span>Note esclusive in ${escD(truncate(fn,24))}</span><span>${uq}</span></div>`;
+    });
+  } else {
+    // compat vecchia struttura
+    html += `<div class="debug-stat-row"><span>Note uniche file A</span><span>${(d.uniqueA||[]).length}</span></div>`;
+    html += `<div class="debug-stat-row"><span>Note uniche file B</span><span>${(d.uniqueB||[]).length}</span></div>`;
+  }
+  html += `<div class="debug-stat-row"><span>Note identiche (no conflitto)</span><span>${(d.same||[]).length}</span></div>`;
+  html += `<div class="debug-stat-row"><span>Note in conflitto</span><span>${(d.conflicts||[]).length}</span></div>`;
+
+  if ((d.conflicts||[]).length) {
+    html += `<h3>⚠️ Conflitti rilevati</h3>`;
+    d.conflicts.forEach(c => {
+      const variantsHtml = (c.variants || [c.a, c.b].filter(Boolean)).map((v, vi) => {
+        const label = v.fileNames ? escD(v.fileNames[0] || ('Variante '+(vi+1))) : (vi===0?'A':'B');
+        return `<div style="margin-top:6px"><b>${label}</b>: ${escD((v.title||''))} — ${escD((v.content||'').slice(0,120))}</div>`;
+      }).join('');
+      html += `<div class="debug-note conflict">
+        <span class="debug-label conf">CONFLITTO</span>
+        <div class="debug-guid">GUID: ${escD(c.guid)}</div>
+        ${variantsHtml}
+        <div class="debug-guid" style="margin-top:6px">Scelta: ${escD(String(c.chosen))}</div>
+      </div>`;
+    });
+  }
+
+  // Note uniche per file (struttura N-file)
+  if ((d.unique||[]).length) {
+    const byFile = {};
+    d.unique.forEach(u => { (byFile[u.fileIndex] = byFile[u.fileIndex]||[]).push(u); });
+    Object.entries(byFile).forEach(([fi, notes]) => {
+      const fn = d.files ? d.files[fi] : `File ${Number(fi)+1}`;
+      html += `<h3>📄 Solo in ${escD(truncate(fn,28))} (${notes.length})</h3>`;
+      notes.slice(0, 50).forEach(n => {
+        html += `<div class="debug-note unique-a">
+          <span class="debug-label a">SOLO</span>
+          <div class="debug-guid">GUID: ${escD(n.guid)}</div>
+          <div class="debug-title">${escD(n.title)}</div>
+        </div>`;
+      });
+      if (notes.length > 50) html += `<div class="debug-stat-row"><span>…e altre ${notes.length-50}</span></div>`;
+    });
+  } else if ((d.uniqueA||[]).length || (d.uniqueB||[]).length) {
+    // compat vecchia struttura
+    const showGroup = (arr, label, cls) => {
+      if (!arr.length) return;
+      html += `<h3>📱 ${label} (${arr.length})</h3>`;
+      arr.slice(0,50).forEach(n => {
+        html += `<div class="debug-note ${cls}">
+          <span class="debug-label ${cls==='unique-a'?'a':'b'}">${label.split(' ')[1]||label}</span>
+          <div class="debug-guid">GUID: ${escD(n.guid)}</div>
+          <div class="debug-title">${escD(n.title)}</div>
+        </div>`;
+      });
+    };
+    showGroup(d.uniqueA||[], 'Solo file A', 'unique-a');
+    showGroup(d.uniqueB||[], 'Solo file B', 'unique-b');
+  }
+
+  if ((d.same||[]).length) {
+    html += `<h3>✅ Identiche in tutti i file (${d.same.length})</h3>`;
+    d.same.slice(0, 30).forEach(n => {
+      html += `<div class="debug-note merged">
+        <span class="debug-label ok">UGUALE</span>
+        <div class="debug-guid">GUID: ${escD(n.guid)}</div>
+        <div class="debug-title">${escD(n.title)}</div>
+      </div>`;
+    });
+    if (d.same.length > 30) html += `<div class="debug-stat-row"><span>…e altre ${d.same.length-30}</span></div>`;
+  }
+
+  if (state.debugMergedNotes) {
+    html += `<h3>📦 Note nel file risultato (${state.debugMergedNotes.length})</h3>`;
+    state.debugMergedNotes.forEach(n => {
+      html += `<div class="debug-note merged">
+        <span class="debug-label ok">RISULTATO</span>
+        <div class="debug-guid">GUID: ${escD(n.guid)}</div>
+        <div class="debug-title">${escD(n.title)}</div>
+        <div class="debug-content">${escD(n.content)}</div>
+      </div>`;
+    });
+  }
+
+  // ── Sezione integrità FK (se disponibile post-merge)
+  if (state.validation) {
+    const v = state.validation;
+    html += `<h3>🔗 Integrità FK (file risultato)</h3>`;
+    if (v.ok) {
+      html += `<div class="debug-stat-row" style="color:#15803d"><span>Tutte le FK verificate</span><span>✅</span></div>`;
+    } else {
+      v.warnings.forEach(w => {
+        html += `<div class="debug-stat-row" style="color:#b45309"><span>${escD(w)}</span><span>⚠️</span></div>`;
+      });
+    }
+    v.info.forEach(m => {
+      html += `<div class="debug-stat-row"><span>${escD(m)}</span></div>`;
+    });
+  }
+
+  // ── Inventario FK dai file caricati (schema live)
+  if (state.files.length > 0 && sqlReady) {
+    html += `<h3>🗃 Schema FK file base</h3>`;
+    try {
+      const db0 = new state.SQL.Database(state.files[0].dbBytes);
+      const tables = db0.exec("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name")
+        .flatMap(r => r.values.map(v => v[0]))
+        .filter(t => !t.startsWith('sqlite_') && t !== 'android_metadata');
+
+      tables.forEach(t => {
+        const fks  = db0.exec(`PRAGMA foreign_key_list("${t}")`).flatMap(r => r.values);
+        const cols = db0.exec(`PRAGMA table_info("${t}")`).flatMap(r => r.values);
+        const pk   = cols.filter(c => c[5] > 0).map(c => c[1]).join(', ');
+        const cnt  = db0.exec(`SELECT COUNT(*) FROM "${t}"`)[0]?.values[0]?.[0] ?? 0;
+        if (fks.length === 0 && cnt === 0) return; // salta vuote senza FK
+        html += `<div class="debug-stat-row" style="flex-direction:column;align-items:flex-start;padding:6px 0">
+          <b>${escD(t)}</b> <span style="color:var(--text-2);font-size:.8rem">PK: ${escD(pk)} — ${cnt} righe</span>`;
+        fks.forEach(f => {
+          html += `<span style="font-size:.8rem;color:#2563eb;margin-left:10px">FK: ${escD(f[3])} → ${escD(f[2])}.${escD(f[4])}</span>`;
+        });
+        html += `</div>`;
+      });
+      db0.close();
+    } catch(e) {
+      html += `<div class="debug-stat-row" style="color:#b45309">Errore lettura schema: ${escHtml(e.message)}</div>`;
+    }
+  }
+
+  el.innerHTML = html || '<div class="debug-empty">Nessun dato da mostrare.</div>';
+}
+
+function renderConflicts() {
+  const list = $('conflict-list');
+  list.innerHTML = '';
+  state.conflicts.forEach((c, i) => {
+    const div = document.createElement('div');
+    div.className = 'conflict-item';
+
+    // Pannelli varianti (uno per versione distinta)
+    const sidesHtml = c.variants.map((v, vi) => {
+      const sideClass = vi === 0 ? 'side-a' : vi === 1 ? 'side-b' : 'side-c';
+      // Mostra nomi file abbreviati (max 2)
+      const fnames = v.fileNames.slice(0, 2).map(n => truncate(n, 20)).join(', ')
+                   + (v.fileNames.length > 2 ? ` +${v.fileNames.length - 2}` : '');
+      return `<div class="conflict-side ${sideClass}">
+        <div class="conflict-side-label">📄 ${escHtml(fnames)}</div>
+        <div class="conflict-text">${escHtml((v.content||'').slice(0,200))}</div>
+      </div>`;
+    }).join('');
+
+    // Pulsanti "Tieni" uno per variante + Entrambe + Unisci
+    const keepBtns = c.variants.map((v, vi) => {
+      const sel = c.chosen === vi ? 'selected-A' : '';
+      const fname = truncate(v.fileNames[0] || `File ${vi+1}`, 16);
+      return `<button type="button" class="conflict-choice ${sel}" data-ci="${i}" data-choice="${vi}">✔ ${escHtml(fname)}</button>`;
+    }).join('');
+
+    const selBoth  = c.chosen === 'BOTH'  ? 'selected-BOTH' : '';
+    const selMerge = c.chosen === 'MERGE' ? 'selected-BOTH' : '';
+
+    div.innerHTML = `
+      <div class="conflict-header">
+        <span class="conflict-tag">CONFLITTO${c.variants.length > 2 ? ' ×'+c.variants.length : ''}</span>
+        <span class="conflict-ref">${escHtml(c.title || 'Nota senza titolo')}</span>
+      </div>
+      <div class="conflict-body">${sidesHtml}</div>
+      <div class="conflict-actions">
+        ${keepBtns}
+        <button type="button" class="conflict-choice ${selBoth}"  data-ci="${i}" data-choice="BOTH">📋 Tutte</button>
+        <button type="button" class="conflict-choice ${selMerge}" data-ci="${i}" data-choice="MERGE">🔗 Unisci</button>
+      </div>`;
+    list.appendChild(div);
+  });
+}
+
+$('conflict-list').addEventListener('click', e => {
+  const btn = e.target.closest('[data-choice]');
+  if (!btn || !btn.dataset.choice) return;
+  if (btn.classList.contains('conflict-side')) return;
+  const ci = parseInt(btn.dataset.ci);
+  const raw = btn.dataset.choice;
+  // choice è un indice numerico (variante) oppure 'BOTH'|'MERGE'
+  const choice = (raw === 'BOTH' || raw === 'MERGE') ? raw : parseInt(raw);
+  state.conflicts[ci].chosen = choice;
+  const item = btn.closest('.conflict-item');
+  item.querySelectorAll('.conflict-choice').forEach(s => s.className = 'conflict-choice');
+  const cls = (choice === 'BOTH' || choice === 'MERGE') ? 'selected-BOTH'
+            : choice === 0 ? 'selected-A' : 'selected-B';
+  btn.classList.add(cls);
+});
+
+$('btn-apply-all-merge').addEventListener('click', () => {
+  // Imposta MERGE su tutti i conflitti
+  state.conflicts.forEach(c => c.chosen = 'MERGE');
+  // Aggiorna UI — tutti i pulsanti "Unisci" diventano selezionati
+  document.querySelectorAll('.conflict-choice').forEach(btn => {
+    btn.className = 'conflict-choice';
+    if (btn.dataset.choice === 'MERGE') btn.classList.add('selected-BOTH');
+  });
+});
+
+// ── STEP 3: MERGE ────────────────────────────────────────
+$('btn-merge').addEventListener('click', () => {
+  showScreen('screen-merging');
+  setTimeout(runMerge, 100);
+});
+
+async function runMerge() {
+  if (!sqlReady) {
+    setProgress(5, 'Attendo motore SQLite…');
+    await waitSQL();
+  }
+  log('info', `Inizio unione di ${state.files.length} file`);
+  setProgress(10, 'Lettura file…');
+
+  try {
+    // Usa primo file come base
+    const baseBytes = state.files[0].dbBytes;
+    const baseZip   = state.files[0].zip;
+    const db = new state.SQL.Database(baseBytes);
+
+    setProgress(20, 'Preparazione database…');
+    log('info', `File base: ${state.files[0].name}`);
+
+    const baseTables = {};
+    db.exec("SELECT name FROM sqlite_master WHERE type='table'")
+      .flatMap(r => r.values.map(v => v[0]))
+      .forEach(t => baseTables[t.toLowerCase()] = t);
+
+    const stats = { notes:0, highlights:0, bookmarks:0, tags:0, other:0, skipped:0 };
+    const step = 60 / (state.files.length - 1);
+
+    for (let fi = 1; fi < state.files.length; fi++) {
+      setProgress(20 + step * fi, `Unione file ${fi+1}/${state.files.length}…`);
+      log('info', `Elaboro: ${state.files[fi].name}`);
+      const srcDb = new state.SQL.Database(state.files[fi].dbBytes);
+      const srcTables = {};
+      srcDb.exec("SELECT name FROM sqlite_master WHERE type='table'")
+        .flatMap(r => r.values.map(v => v[0]))
+        .forEach(t => srcTables[t.toLowerCase()] = t);
+
+      // Ordine di merge per rispettare le dipendenze FK:
+      // parent prima (Location, Tag, UserMark), poi child (BlockRange, Note, TagMap…)
+      const MERGE_PRIORITY = {
+        location: 0,
+        tag: 1,
+        usermark: 2, userhighlight: 2,
+        note: 3, usernote: 3,
+        blockrange: 4, blocktextrange: 4,
+        bookmark: 5, userbookmark: 5,
+        tagmap: 6, notetagmap: 6,
+        inputfield: 7,
+      };
+      const sortedTables = Object.entries(srcTables).sort(([a], [b]) => {
+        const pa = MERGE_PRIORITY[a] ?? 99;
+        const pb = MERGE_PRIORITY[b] ?? 99;
+        return pa - pb;
+      });
+
+      for (const [tl, tOrig] of sortedTables) {
+        if (tl.startsWith('sqlite_') || tl === 'lastmodified') continue;
+        if (!baseTables[tl]) continue;
+        const baseTOrig = baseTables[tl];
+
+        try {
+          mergeTable(db, srcDb, baseTOrig, tOrig, tl, stats,
+            state.conflicts, fi);
+        } catch(e) {
+          log('warn', `Tabella ${tOrig}: ${e.message}`);
+        }
+      }
+      srcDb.close();
+    }
+
+    // Post-merge: correggi LocationId orfani rimasti nel DB risultante
+    // (es. note con LocationId invalido già nel file base, non rimappabili durante il merge)
+    try {
+      const noteTblFix = baseTables['note'] || baseTables['usernote'];
+      const locTblFix  = baseTables['location'];
+      if (noteTblFix && locTblFix) {
+        const orphanNoteCount = db.exec(
+          `SELECT COUNT(*) FROM "${noteTblFix}" WHERE LocationId IS NOT NULL AND LocationId NOT IN (SELECT LocationId FROM "${locTblFix}")`
+        )[0]?.values[0][0] || 0;
+        if (orphanNoteCount > 0) {
+          db.run(`UPDATE "${noteTblFix}" SET LocationId = NULL WHERE LocationId IS NOT NULL AND LocationId NOT IN (SELECT LocationId FROM "${locTblFix}")`);
+          log('warn', `Corretti ${orphanNoteCount} Note con LocationId orfano (impostato a NULL)`);
+        }
+      }
+    } catch(e) { log('warn', 'Fix orfani Note: ' + e.message); }
+
+    setProgress(85, 'Scrittura file…');
+    log('ok', `Note aggiunte: ${stats.notes}`);
+    log('ok', `Evidenziazioni: ${stats.highlights}`);
+    log('ok', `Segnalibri: ${stats.bookmarks}`);
+    log('ok', `Tag: ${stats.tags}`);
+    log('info', `Duplicati ignorati: ${stats.skipped}`);
+
+    // Aggiorna LastModified
+    const lmTable = baseTables['lastmodified'];
+    if (lmTable) {
+      try {
+        db.run(`DELETE FROM "${lmTable}"`);
+        db.run(`INSERT INTO "${lmTable}" VALUES (?)`,
+          [new Date().toISOString().replace(/\.\d{3}Z$/, '+00:00')]);
+      } catch(e) {}
+    }
+
+    // DEBUG: estrai tutte le note dal DB risultato finale
+    try {
+      const noteTblFinal = baseTables['note'] || baseTables['usernote'];
+      if (noteTblFinal) {
+        state.debugMergedNotes = db.exec(`SELECT Guid, Title, Content FROM "${noteTblFinal}" WHERE Guid IS NOT NULL`)
+          .flatMap(r => r.values)
+          .map(([g,t,c]) => ({ guid: g, title: t||'', content: c||'' }));
+      }
+    } catch(e) { state.debugMergedNotes = null; }
+
+    // Serializza DB
+    const dbOut = db.export();
+    db.close();
+
+    setProgress(92, 'Creazione archivio…');
+
+    // Crea nuovo ZIP
+    const outZip = new JSZip();
+    outZip.file('userData.db', dbOut);
+
+    // Prendi manifest dal primo file, aggiorna date
+    let manifest = {};
+    const mf = baseZip.file('manifest.json');
+    if (mf) {
+      manifest = JSON.parse(await mf.async('string'));
+    }
+    const nowStr = new Date().toISOString().replace(/\.\d{3}Z$/, '+00:00');
+    if (!manifest.userDataBackup) manifest.userDataBackup = {};
+    manifest.userDataBackup.lastModifiedDate = nowStr;
+    manifest.creationDate = nowStr;
+    outZip.file('manifest.json', JSON.stringify(manifest, null, 2));
+
+    state.mergedBytes = await outZip.generateAsync({ type:'uint8array', compression:'DEFLATE' });
+    state.stats = stats;
+
+    setProgress(95, 'Validazione file generato…');
+    const validation = await validateMergedOutput(state.mergedBytes);
+    state.validation = validation;
+
+    if (validation.ok) {
+      setProgress(100, 'Completato!');
+      log('ok', '✓ File unito creato con successo');
+      validation.info.forEach(m => log('info', m));
+    } else {
+      setProgress(100, 'Completato con avvisi');
+      log('warn', '⚠ Validazione: trovati problemi nel file generato');
+      validation.warnings.forEach(w => log('err', '  • ' + w));
+      validation.info.forEach(m => log('info', m));
+    }
+
+    setTimeout(() => {
+      showResult();
+    }, 600);
+
+  } catch(e) {
+    log('err', 'Errore: ' + e.message);
+    setProgress(0, 'Errore durante l\'unione');
+    alert('Errore durante l\'unione:\n' + e.message);
+  }
+}
+
+function mergeTable(baseDb, srcDb, baseTOrig, srcTOrig, tl, stats, conflicts, srcFileIndex) {
+  // Ottieni colonne
+  const colRes = baseDb.exec(`PRAGMA table_info("${baseTOrig}")`);
+  if (!colRes.length) return;
+  const cols = colRes[0].values.map(v => ({ idx: v[0], name: v[1], pk: v[5] }));
+  const colNames = cols.map(c => c.name);
+  const pkCol = cols.find(c => c.pk === 1)?.name;
+
+  // Identifica chiave semantica
+  const semanticKey = getSemanticKey(tl, colNames);
+
+  // Rimappa FK — costruisce rowTransform per ogni tabella che ha FK a PK variabili
+  let rowTransform = null;
+
+  // Helper: crea transform per una singola colonna FK tramite una Map
+  const makeFkTransform = (col, map) => {
+    if (!col || map.size === 0) return null;
+    return rowObj => {
+      const v = rowObj[col];
+      if (v == null) return rowObj;
+      const mapped = map.get(v);
+      return mapped !== undefined ? { ...rowObj, [col]: mapped } : rowObj;
+    };
+  };
+
+  let skipResolver = null;
+  if (tl === 'usermark' || tl === 'userhighlight') {
+    // LocationId → Location
+    const locMap = buildLocationIdMap(baseDb, srcDb);
+    const locCol = colNames.find(c => /^locationid$/i.test(c));
+    const guidCol = colNames.find(c => /^usermarkguid$/i.test(c));
+    rowTransform = makeFkTransform(locCol, locMap);
+    // skipResolver: stessa GUID, LocationId effettiva diversa → risolvi senza master
+    if (locCol && guidCol) {
+      skipResolver = (() => {
+        // Mappa lazy: costruita al primo conflitto
+        let baseGuidToLocId = null;
+        let locIdIsBook = null;
+        let conflicts = 0;
+        return (baseDb, baseTOrig, mappedObj) => {
+          const srcLocId = mappedObj[locCol];
+          if (srcLocId == null) return;
+          // Costruisci mappe al primo uso
+          if (!baseGuidToLocId) {
+            baseGuidToLocId = new Map();
+            try {
+              baseDb.exec(`SELECT "${guidCol}", "${locCol}" FROM "${baseTOrig}"`).flatMap(r => r.values)
+                .forEach(([g, l]) => baseGuidToLocId.set(g, l));
+            } catch(e) {}
+          }
+          if (!locIdIsBook) {
+            locIdIsBook = new Map();
+            try {
+              baseDb.exec('SELECT LocationId, BookNumber FROM Location').flatMap(r => r.values)
+                .forEach(([id, bn]) => locIdIsBook.set(id, bn != null));
+            } catch(e) {}
+          }
+          const guid = mappedObj[guidCol];
+          const baseLocId = baseGuidToLocId.get(guid);
+          if (baseLocId == null || baseLocId === srcLocId) return;
+          // Stessa GUID, LocationId diversa → possibile corruzione
+          const srcIsBook  = locIdIsBook.get(srcLocId)  ?? false;
+          const baseIsBook = locIdIsBook.get(baseLocId) ?? false;
+          // Regola paritaria: preferisci location biblica su rivista (BookNumber NOT NULL > NULL)
+          if (srcIsBook && !baseIsBook) {
+            try {
+              baseDb.run(`UPDATE "${baseTOrig}" SET "${locCol}"=? WHERE "${guidCol}"=?`,
+                [srcLocId, guid]);
+              baseGuidToLocId.set(guid, srcLocId);
+              locIdIsBook.set(srcLocId, true);
+              conflicts++;
+              if (conflicts === 1)
+                log('warn', `Conflitto pubblicazione UserMark: alcune evidenziazioni puntavano a pubblicazioni diverse tra i file. Usata la versione biblica (regola automatica).`);
+            } catch(e) {}
+          }
+        };
+      })();
+    }
+  }
+
+  if (tl === 'note' || tl === 'usernote') {
+    // LocationId → Location
+    const locMap = buildLocationIdMap(baseDb, srcDb);
+    const locCol = colNames.find(c => /^locationid$/i.test(c));
+    const t1 = makeFkTransform(locCol, locMap);
+    // UserMarkId → UserMark (via UserMarkGuid)
+    const umMap = buildPkMapByGuid(baseDb, srcDb, /^usermark$/i, /^usermarkguid$/i);
+    const umCol = colNames.find(c => /^usermarkid$/i.test(c));
+    const t2 = makeFkTransform(umCol, umMap);
+    rowTransform = composeTransforms(t1, t2);
+  }
+
+  if (tl === 'tagmap' || tl === 'notetagmap') {
+    // NoteId → Note (via NoteGuid)
+    const noteMap = buildPkMapByGuid(baseDb, srcDb, /^(user)?note$/i, /^(note)?guid$/i);
+    const noteCol = colNames.find(c => /^noteid$/i.test(c));
+    const t1 = makeFkTransform(noteCol, noteMap);
+    // TagId → Tag (via Tag.Name)
+    const tagMap = buildTagIdMap(baseDb, srcDb);
+    const tagCol = colNames.find(c => /^tagid$/i.test(c));
+    const t2 = makeFkTransform(tagCol, tagMap);
+    // LocationId → Location (opzionale su TagMap)
+    const locMap = buildLocationIdMap(baseDb, srcDb);
+    const locCol = colNames.find(c => /^locationid$/i.test(c));
+    const t3 = makeFkTransform(locCol, locMap);
+    rowTransform = composeTransforms(t1, t2, t3);
+  }
+
+  if (tl === 'bookmark' || tl === 'userbookmark') {
+    // LocationId → Location
+    const locMap = buildLocationIdMap(baseDb, srcDb);
+    const locCol = colNames.find(c => /^locationid$/i.test(c));
+    const pubCol = colNames.find(c => /^publicationlocationid$/i.test(c));
+    const t1 = makeFkTransform(locCol, locMap);
+    const t2 = makeFkTransform(pubCol, locMap);
+    rowTransform = composeTransforms(t1, t2);
+  }
+
+  if (tl === 'blockrange') {
+    const userMarkIdCol = colNames.find(c => /^usermarkid$/i.test(c));
+    if (userMarkIdCol) rowTransform = buildBlockRangeTransform(baseDb, srcDb, userMarkIdCol);
+  }
+
+  if (semanticKey.length > 0) {
+    mergeByKey(baseDb, srcDb, baseTOrig, srcTOrig, colNames, pkCol,
+               semanticKey, tl, stats, conflicts, srcFileIndex, rowTransform, skipResolver);
+  } else {
+    mergeByFingerprint(baseDb, srcDb, baseTOrig, srcTOrig, colNames, pkCol, tl, stats, rowTransform);
+  }
+}
+
+function buildBlockRangeTransform(baseDb, srcDb, userMarkIdCol) {
+  try {
+    const findMarkTbl = db => db.exec(
+      "SELECT name FROM sqlite_master WHERE type='table' AND lower(name) LIKE '%usermark%'"
+    )[0]?.values[0]?.[0] || null;
+    const srcTbl = findMarkTbl(srcDb);
+    const baseTbl = findMarkTbl(baseDb);
+    if (!srcTbl || !baseTbl) return null;
+    const getPkGuid = (db, tbl) => {
+      const info = db.exec(`PRAGMA table_info("${tbl}")`)[0]?.values || [];
+      return {
+        pk:   info.find(v => v[5] === 1)?.[1] || null,
+        guid: info.find(v => /guid/i.test(v[1]))?.[1] || null
+      };
+    };
+    const src  = getPkGuid(srcDb, srcTbl);
+    const base = getPkGuid(baseDb, baseTbl);
+    if (!src.pk || !src.guid || !base.pk || !base.guid) return null;
+    const srcIdToGuid = new Map();
+    srcDb.exec(`SELECT "${src.pk}", "${src.guid}" FROM "${srcTbl}"`).flatMap(r => r.values)
+      .forEach(([id, guid]) => srcIdToGuid.set(id, guid));
+    const baseGuidToId = new Map();
+    baseDb.exec(`SELECT "${base.guid}", "${base.pk}" FROM "${baseTbl}"`).flatMap(r => r.values)
+      .forEach(([guid, id]) => baseGuidToId.set(guid, id));
+    return rowObj => {
+      const oldId = rowObj[userMarkIdCol];
+      if (oldId == null) return rowObj;
+      const guid  = srcIdToGuid.get(oldId);
+      if (!guid) return rowObj;
+      const newId = baseGuidToId.get(guid);
+      if (newId == null) return rowObj;
+      return { ...rowObj, [userMarkIdCol]: newId };
+    };
+  } catch(e) { return null; }
+}
+
+function getSemanticKey(tl, cols) {
+  const has = k => cols.some(c => c.toLowerCase() === k.toLowerCase());
+  if (tl === 'note' || tl === 'usernote') {
+    if (has('Guid')) return ['Guid'];
+    if (has('guid')) return ['guid'];
+  }
+  if (tl === 'usermark' || tl === 'userhighlight' || tl === 'highlight') {
+    const guidCol = cols.find(c => /^usermarkguid$/i.test(c));
+    if (guidCol) return [guidCol];
+    const keys = cols.filter(c => /verseid|blockrangeindex|starttoken/i.test(c));
+    if (keys.length) return keys.slice(0,2);
+  }
+  // blockrange: usa fingerprint (non semantic key) — la FK UserMarkId viene rimappata separatamente
+  if (tl === 'bookmark' || tl === 'userbookmark') {
+    const keys = cols.filter(c => /slot|publication/i.test(c));
+    if (keys.length) return keys.slice(0,2);
+  }
+  if (tl === 'tag' || tl === 'usertag') {
+    const keys = cols.filter(c => /^name$/i.test(c));
+    if (keys.length) return keys;
+  }
+  if (tl === 'tagmap' || tl === 'notetagmap') {
+    const keys = cols.filter(c => /noteid|tagid/i.test(c));
+    if (keys.length >= 2) return keys.slice(0,2);
+  }
+  if (tl === 'location') {
+    // Chiave estesa: include KeySymbol e MepsLanguage per distinguere
+    // la stessa pubblicazione in lingue diverse (fix: false deduplication)
+    const keys = cols.filter(c => /booknumber|chapternumber|versenumber|documentid|keysymbol|issuetagnum|issuetagnumber|track|mepslanguage/i.test(c));
+    if (keys.length >= 1) return keys;
+  }
+  if (tl === 'playlist' || tl === 'playlistitem') {
+    const keys = cols.filter(c => /uniqueid|guid/i.test(c));
+    if (keys.length) return keys.slice(0,1);
+  }
+  return [];
+}
+
+// Mappa generica: srcPK → basePK tramite colonna GUID/semantic
+// tblPattern: regexp per trovare la tabella, guidColPattern: regexp per la colonna chiave
+function buildPkMapByGuid(baseDb, srcDb, tblPattern, guidColPattern) {
+  try {
+    const findTbl = db => db.exec(
+      `SELECT name FROM sqlite_master WHERE type='table' AND lower(name) REGEXP ?`,
+      [tblPattern.source]
+    )?.[0]?.values?.[0]?.[0] || null;
+    // Fallback senza REGEXP (sqlite potrebbe non averlo)
+    const findTblLike = (db, pat) => {
+      const rows = db.exec("SELECT name FROM sqlite_master WHERE type='table'")
+        .flatMap(r => r.values.map(v => v[0]));
+      return rows.find(n => pat.test(n.toLowerCase())) || null;
+    };
+    const srcTbl  = findTblLike(srcDb,  tblPattern);
+    const baseTbl = findTblLike(baseDb, tblPattern);
+    if (!srcTbl || !baseTbl) return new Map();
+    const getPkGuid = (db, tbl) => {
+      const info = db.exec(`PRAGMA table_info("${tbl}")`)[0]?.values || [];
+      return {
+        pk:   info.find(v => v[5] === 1)?.[1] || null,
+        guid: info.map(v => v[1]).find(n => guidColPattern.test(n)) || null
+      };
+    };
+    const src  = getPkGuid(srcDb,  srcTbl);
+    const base = getPkGuid(baseDb, baseTbl);
+    if (!src.pk || !src.guid || !base.pk || !base.guid) return new Map();
+    const srcIdToGuid = new Map();
+    srcDb.exec(`SELECT "${src.pk}", "${src.guid}" FROM "${srcTbl}"`).flatMap(r => r.values)
+      .forEach(([id, guid]) => srcIdToGuid.set(id, guid));
+    const baseGuidToId = new Map();
+    baseDb.exec(`SELECT "${base.guid}", "${base.pk}" FROM "${baseTbl}"`).flatMap(r => r.values)
+      .forEach(([guid, id]) => baseGuidToId.set(guid, id));
+    const map = new Map();
+    for (const [sid, guid] of srcIdToGuid) {
+      const bid = baseGuidToId.get(guid);
+      if (bid !== undefined) map.set(sid, bid);
+    }
+    return map;
+  } catch(e) { return new Map(); }
+}
+
+// Mappa TagId: src→base via Tag.Name (chiave semantica)
+function buildTagIdMap(baseDb, srcDb) {
+  try {
+    const findTbl = (db) => db.exec("SELECT name FROM sqlite_master WHERE type='table'")
+      .flatMap(r => r.values.map(v => v[0]))
+      .find(n => /^tag$/i.test(n)) || null;
+    const srcTbl  = findTbl(srcDb);
+    const baseTbl = findTbl(baseDb);
+    if (!srcTbl || !baseTbl) return new Map();
+    const getPkName = (db, tbl) => {
+      const info = db.exec(`PRAGMA table_info("${tbl}")`)[0]?.values || [];
+      return {
+        pk:   info.find(v => v[5] === 1)?.[1] || null,
+        name: info.map(v => v[1]).find(c => /^name$/i.test(c)) || null
+      };
+    };
+    const src  = getPkName(srcDb,  srcTbl);
+    const base = getPkName(baseDb, baseTbl);
+    if (!src.pk || !src.name || !base.pk || !base.name) return new Map();
+    const srcIdToName = new Map();
+    srcDb.exec(`SELECT "${src.pk}", "${src.name}" FROM "${srcTbl}"`).flatMap(r => r.values)
+      .forEach(([id, name]) => srcIdToName.set(id, name));
+    const baseNameToId = new Map();
+    baseDb.exec(`SELECT "${base.name}", "${base.pk}" FROM "${baseTbl}"`).flatMap(r => r.values)
+      .forEach(([name, id]) => baseNameToId.set(name, id));
+    const map = new Map();
+    for (const [sid, name] of srcIdToName) {
+      const bid = baseNameToId.get(name);
+      if (bid !== undefined) map.set(sid, bid);
+    }
+    return map;
+  } catch(e) { return new Map(); }
+}
+
+// Compone più rowTransform in sequenza (salta null)
+function composeTransforms(...fns) {
+  const active = fns.filter(Boolean);
+  if (active.length === 0) return null;
+  if (active.length === 1) return active[0];
+  return rowObj => active.reduce((r, fn) => fn(r) || r, rowObj);
+}
+
+function buildLocationIdMap(baseDb, srcDb) {
+  try {
+    const findTbl = db => db.exec(
+      "SELECT name FROM sqlite_master WHERE type='table' AND lower(name) LIKE '%location%'"
+    )[0]?.values[0]?.[0] || null;
+    const srcTbl = findTbl(srcDb);
+    const baseTbl = findTbl(baseDb);
+    if (!srcTbl || !baseTbl) return new Map();
+    const KEYS = ['booknumber','chapternumber','docid','documentid','keysymbol','issuetagnum','issuetagnumber','track','mepslanguage'];
+    const getCols = (db, tbl) => {
+      const info = db.exec(`PRAGMA table_info("${tbl}")`)[0]?.values || [];
+      return {
+        pk:   info.find(v => v[5] === 1)?.[1],
+        keys: info.map(v => v[1]).filter(c => KEYS.some(k => c.toLowerCase().includes(k)))
+      };
+    };
+    const src  = getCols(srcDb, srcTbl);
+    const base = getCols(baseDb, baseTbl);
+    if (!src.pk || !base.pk || src.keys.length === 0) return new Map();
+    const ks = k => k.map(c => `"${c}"`).join(',');
+    const bld = (db, tbl, pk, keys) => {
+      const m = new Map();
+      db.exec(`SELECT "${pk}",${ks(keys)} FROM "${tbl}"`).flatMap(r => r.values)
+        .forEach(r => m.set(r.slice(1).join('|'), r[0]));
+      return m;
+    };
+    const srcK  = bld(srcDb,  srcTbl,  src.pk,  src.keys);
+    const baseK = bld(baseDb, baseTbl, base.pk, base.keys);
+    const map = new Map();
+    for (const [k, sid] of srcK) { const bid = baseK.get(k); if (bid !== undefined) map.set(sid, bid); }
+    return map;
+  } catch(e) { return new Map(); }
+}
+
+function mergeByKey(baseDb, srcDb, baseTOrig, srcTOrig, colNames, pkCol,
+                     keyColsRaw, tl, stats, conflicts, srcFileIndex, rowTransform = null, skipResolver = null) {
+  // normalizza keyCol ai nomi reali
+  const keyCols = keyColsRaw.map(k =>
+    colNames.find(c => c.toLowerCase() === k.toLowerCase()) || k
+  );
+  const keyStr = keyCols.map(c => `"${c}"`).join(', ');
+  const colStr = colNames.map(c => `"${c}"`).join(', ');
+  const placeholders = colNames.map(() => '?').join(', ');
+
+  // set chiavi esistenti nel base
+  const existing = new Set();
+  baseDb.exec(`SELECT ${keyStr} FROM "${baseTOrig}"`).flatMap(r => r.values)
+    .forEach(row => existing.add(row.join('|')));
+
+  // righe sorgente
+  const srcRows = srcDb.exec(`SELECT ${colStr} FROM "${srcTOrig}"`).flatMap(r => r.values);
+
+  let added = 0;
+  for (const row of srcRows) {
+    const rowObj = {};
+    colNames.forEach((c, i) => rowObj[c] = row[i]);
+    // Applica transform PRIMA di keyVal: necessario per tabelle con FK nella chiave semantica
+    // (es. tagmap: NoteId/TagId sono FK → devono essere rimappati prima del confronto)
+    const mappedObj = rowTransform ? (rowTransform(rowObj) || rowObj) : rowObj;
+    const keyVal = keyCols.map(k => mappedObj[k]).join('|');
+
+    if (existing.has(keyVal)) {
+      // Gestione conflitti note — per TUTTI i file sorgente (non solo isFirst)
+      if (tl === 'note' || tl === 'usernote') {
+        const guidCol = keyCols[0];
+        const conflict = conflicts.find(c => c.guid === rowObj[guidCol]);
+        if (conflict) {
+          const chosen = conflict.chosen;
+
+          if (chosen === 'BOTH') {
+            // Inserisce questa versione come copia con GUID modificato
+            const newGuid = 'copy-' + srcFileIndex + '-' + rowObj[guidCol];
+            const srcTitle = rowObj['Title'] || rowObj['title'] || '';
+            const srcFile  = conflict.variants.find(v => v.fileIndices.includes(srcFileIndex));
+            const label    = srcFile ? ' (copia ' + truncate(srcFile.fileNames[0] || String(srcFileIndex), 12) + ')' : ' (copia)';
+            const newRowObj = { ...rowObj, [pkCol]: null, [guidCol]: newGuid,
+              Title: srcTitle + label };
+            const values = remapPK(baseDb, baseTOrig, colNames, pkCol, newRowObj);
+            try {
+              baseDb.run(`INSERT OR IGNORE INTO "${baseTOrig}" (${colStr}) VALUES (${placeholders})`, values);
+              added++;
+            } catch(e) {}
+
+          } else if (chosen === 'MERGE') {
+            // Concatena tutti i testi: eseguito all'ultimo file che contiene questa nota
+            const maxVariantIdx = Math.max(...conflict.variants.flatMap(v => v.fileIndices));
+            const isLastSrc = srcFileIndex === maxVariantIdx;
+            if (isLastSrc) {
+              const contentCol = colNames.find(c => /^content$/i.test(c)) || 'Content';
+              const merged = conflict.variants.map(v => v.content || '').filter(Boolean).join('\n\n');
+              try {
+                baseDb.run(`UPDATE "${baseTOrig}" SET "${contentCol}" = ? WHERE "${guidCol}" = ?`,
+                  [merged, rowObj[guidCol]]);
+              } catch(e) {}
+            }
+
+          } else if (typeof chosen === 'number') {
+            // chosen = indice variante: aggiorna il base se questa variante è quella scelta
+            const myVariant = conflict.variants.find(v => v.fileIndices.includes(srcFileIndex));
+            const myVariantIdx = myVariant ? conflict.variants.indexOf(myVariant) : -1;
+            if (myVariantIdx > 0 && myVariantIdx === chosen) {
+              // Questa è la versione scelta e non è già quella nel base (indice 0)
+              const sets = colNames.filter(c => c !== pkCol).map(c => `"${c}" = ?`).join(', ');
+              const vals = [...colNames.filter(c => c !== pkCol).map(c => rowObj[c]), rowObj[guidCol]];
+              try { baseDb.run(`UPDATE "${baseTOrig}" SET ${sets} WHERE "${guidCol}" = ?`, vals); } catch(e) {}
+            }
+            // chosen === 0 o variante non scelta: non fare nulla (già nel base o non voluta)
+          }
+        }
+      }
+      if (skipResolver) skipResolver(baseDb, baseTOrig, mappedObj);
+      stats.skipped++;
+      continue;
+    }
+
+    // remap PK — mappedObj ha già la transform applicata
+    const values = remapPK(baseDb, baseTOrig, colNames, pkCol, mappedObj);
+    try {
+      baseDb.run(
+        `INSERT OR IGNORE INTO "${baseTOrig}" (${colStr}) VALUES (${placeholders})`,
+        values
+      );
+      existing.add(keyVal);
+      added++;
+    } catch(e) { stats.skipped++; }
+  }
+
+  updateStats(stats, tl, added);
+}
+
+function mergeByFingerprint(baseDb, srcDb, baseTOrig, srcTOrig, colNames, pkCol, tl, stats, rowTransform = null) {
+  const colStr = colNames.map(c => `"${c}"`).join(', ');
+  const placeholders = colNames.map(() => '?').join(', ');
+  const pkIdx = pkCol ? colNames.indexOf(pkCol) : 0;
+
+  const existing = new Set();
+  baseDb.exec(`SELECT ${colStr} FROM "${baseTOrig}"`).flatMap(r => r.values)
+    .forEach(row => {
+      const fp = row.filter((_,i) => i !== pkIdx).join('|');
+      existing.add(fp);
+    });
+
+  const srcRows = srcDb.exec(`SELECT ${colStr} FROM "${srcTOrig}"`).flatMap(r => r.values);
+  let added = 0;
+  for (const row of srcRows) {
+    let rowObj = {};
+    colNames.forEach((c, i) => rowObj[c] = row[i]);
+    if (rowTransform) rowObj = rowTransform(rowObj) || rowObj;
+    const fp = colNames.filter(c => c !== pkCol).map(c => rowObj[c]).join('|');
+    if (existing.has(fp)) { stats.skipped++; continue; }
+    const values = remapPK(baseDb, baseTOrig, colNames, pkCol, rowObj);
+    try {
+      baseDb.run(
+        `INSERT OR IGNORE INTO "${baseTOrig}" (${colStr}) VALUES (${placeholders})`,
+        values
+      );
+      existing.add(fp);
+      added++;
+    } catch(e) { stats.skipped++; }
+  }
+  updateStats(stats, tl, added);
+}
+
+function remapPK(baseDb, table, colNames, pkCol, rowObj) {
+  if (pkCol && rowObj[pkCol] !== undefined && rowObj[pkCol] !== null) {
+    try {
+      const res = baseDb.exec(`SELECT MAX("${pkCol}") FROM "${table}"`);
+      const maxId = res[0]?.values[0][0] ?? 0;
+      rowObj = { ...rowObj, [pkCol]: (maxId || 0) + 1 };
+    } catch(e) {}
+  }
+  return colNames.map(c => rowObj[c] ?? null);
+}
+
+function updateStats(stats, tl, added) {
+  if (tl === 'note' || tl === 'usernote') stats.notes += added;
+  else if (/usermark|highlight|blockrange/.test(tl)) stats.highlights += added;
+  else if (/bookmark/.test(tl)) stats.bookmarks += added;
+  else if (/tag/.test(tl)) stats.tags += added;
+  else stats.other += added;
+}
+
+// ── VALIDAZIONE OUTPUT ──────────────────────────────────
+async function validateMergedOutput(bytes) {
+  const result = { ok: true, warnings: [], info: [] };
+  try {
+    // Apri ZIP
+    const zip = await JSZip.loadAsync(bytes);
+    const files = Object.keys(zip.files);
+
+    // Controlla manifest.json
+    if (!files.some(f => f.toLowerCase() === 'manifest.json')) {
+      result.warnings.push('manifest.json assente nello ZIP');
+      result.ok = false;
+    } else {
+      try {
+        const mfStr = await zip.file(files.find(f => f.toLowerCase() === 'manifest.json')).async('string');
+        JSON.parse(mfStr);
+        result.info.push('manifest.json ✓');
+      } catch(e) { result.warnings.push('manifest.json non è JSON valido'); result.ok = false; }
+    }
+
+    // Controlla userData.db
+    const dbEntry = files.find(f => f.toLowerCase() === 'userdata.db');
+    if (!dbEntry) {
+      result.warnings.push('userData.db assente nello ZIP');
+      result.ok = false;
+      return result;
+    }
+    result.info.push('userData.db presente ✓');
+
+    // Apri SQLite
+    const dbBuf = await zip.file(dbEntry).async('uint8array');
+    let db;
+    try {
+      db = new state.SQL.Database(dbBuf);
+    } catch(e) {
+      result.warnings.push('userData.db non è un database SQLite valido: ' + e.message);
+      result.ok = false;
+      return result;
+    }
+
+    // Elenca tabelle
+    const tables = db.exec("SELECT name FROM sqlite_master WHERE type='table'")
+      .flatMap(r => r.values.map(v => v[0]));
+    if (tables.length === 0) {
+      result.warnings.push('Il database non contiene tabelle');
+      result.ok = false;
+    } else {
+      result.info.push(`Tabelle presenti: ${tables.length}`);
+    }
+
+    // Conta righe nelle tabelle principali
+    const MAIN_TABLES = ['note','usernote','usermark','userhighlight','bookmark','userbookmark','location','blocktextrange','blockrange'];
+    for (const tl of MAIN_TABLES) {
+      const tOrig = tables.find(t => t.toLowerCase().includes(tl.replace('user','').replace('block',''))
+                                  || t.toLowerCase() === tl);
+      if (!tOrig) continue;
+      try {
+        const cnt = db.exec(`SELECT COUNT(*) FROM "${tOrig}"`)[0]?.values[0]?.[0] ?? 0;
+        result.info.push(`${tOrig}: ${cnt} righe`);
+        if (cnt === 0 && (tl.includes('note') || tl.includes('mark'))) {
+          result.warnings.push(`${tOrig} è vuota — potrebbe indicare un problema nel merge`);
+        }
+      } catch(e) { result.warnings.push(`Errore lettura ${tOrig}: ${e.message}`); }
+    }
+
+    // Integrità FK: BlockRange → UserMark
+    try {
+      const umTbl = tables.find(t => /usermark/i.test(t));
+      const brTbl = tables.find(t => /blockrange/i.test(t) || /blocktextrange/i.test(t));
+      if (umTbl && brTbl) {
+        const broken = db.exec(
+          `SELECT COUNT(*) FROM "${brTbl}" br
+           LEFT JOIN "${umTbl}" um ON br.UserMarkId = um.UserMarkId
+           WHERE um.UserMarkId IS NULL`
+        )[0]?.values[0]?.[0] ?? 0;
+        if (broken > 0) {
+          result.warnings.push(`FK rotta: ${broken} righe in ${brTbl} senza corrispondenza in ${umTbl}`);
+          result.ok = false;
+        } else {
+          result.info.push(`Integrità FK BlockRange→UserMark ✓`);
+        }
+      }
+    } catch(e) { /* tabelle assenti, non un errore */ }
+
+    db.close();
+  } catch(e) {
+    result.warnings.push('Errore durante la validazione: ' + e.message);
+    result.ok = false;
+  }
+  return result;
+}
+
+// ── RISULTATO ────────────────────────────────────────────
+function showResult() {
+  const s = state.stats;
+  $('result-stats').innerHTML = `
+    <div class="result-stat">
+      <div class="result-stat-n">${s.notes}</div>
+      <div class="result-stat-l">Note aggiunte</div>
+    </div>
+    <div class="result-stat">
+      <div class="result-stat-n">${s.highlights}</div>
+      <div class="result-stat-l">Evidenziazioni</div>
+    </div>
+    <div class="result-stat">
+      <div class="result-stat-n">${s.bookmarks}</div>
+      <div class="result-stat-l">Segnalibri</div>
+    </div>
+    <div class="result-stat">
+      <div class="result-stat-n">${s.tags + s.other}</div>
+      <div class="result-stat-l">Tag e altri</div>
+    </div>`;
+  // Badge validazione
+  const v = state.validation;
+  const vEl = $('validation-badge');
+  if (vEl && v) {
+    if (v.ok) {
+      vEl.innerHTML = '<span class="badge-ok">✅ File verificato — nessun problema</span>';
+    } else {
+      const msgs = v.warnings.map(w => `<li>${escHtml(w)}</li>`).join('');
+      vEl.innerHTML = `<span class="badge-warn">⚠️ Avvisi sul file generato</span><ul class="val-warnings">${msgs}</ul>`;
+    }
+    vEl.style.display = '';
+  }
+
+  showScreen('screen-result');
+
+  // Aggiorna pannello debug se aperto
+  if ($('debug-panel').style.display !== 'none') renderDebugPanel();
+}
+
+$('btn-download').addEventListener('click', async () => {
+  if (!state.mergedBytes) return;
+  const ts = new Date().toISOString().slice(0,10).replace(/-/g,'');
+  const fname = `UniNote_${ts}.jwlibrary`;
+  const blob = new Blob([state.mergedBytes], { type: 'application/octet-stream' });
+
+  // Usa showSaveFilePicker se disponibile: dialog nativo OS ricorda l'ultima cartella
+  if (window.showSaveFilePicker) {
+    try {
+      const handle = await window.showSaveFilePicker({
+        suggestedName: fname,
+        types: [{ description: 'JW Library Backup', accept: { 'application/octet-stream': ['.jwlibrary'] } }]
+      });
+      const writable = await handle.createWritable();
+      await writable.write(blob);
+      await writable.close();
+      return;
+    } catch(e) {
+      if (e.name === 'AbortError') return; // utente ha annullato
+      // fallback al download classico
+    }
+  }
+  // Fallback: download classico
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = fname;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1000);
+});
+
+$('btn-restart').addEventListener('click', () => {
+  state.files = [];
+  state.conflicts = [];
+  state.mergedBytes = null;
+  state.stats = {};
+  $('file-list').innerHTML = '';
+  $('log-wrap').innerHTML = '';
+  $('progress-bar').style.width = '0%';
+  updateLoadUI();
+  showScreen('screen-load');
+});
+
+// ── UTILS ────────────────────────────────────────────────
+function escHtml(s) {
+  return String(s||'')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function truncate(s, n) {
+  return s.length > n ? s.slice(0, n-1) + '…' : s;
+}
+
+// ── PWA INSTALL POPUP ────────────────────────────────────
+let deferredPrompt = null;
+const PWA_DISMISSED_KEY = 'uninote_pwa_dismissed';
+const isStandalone = () =>
+  window.matchMedia('(display-mode: standalone)').matches ||
+  window.navigator.standalone === true;
+
+function closePwaPopup(permanent) {
+  const overlay = $('pwa-overlay');
+  if (!overlay) return;
+  overlay.style.opacity = '0';
+  overlay.style.transition = 'opacity 0.25s';
+  setTimeout(() => { overlay.style.display = 'none'; overlay.style.opacity = ''; }, 260);
+  if (permanent) localStorage.setItem(PWA_DISMISSED_KEY, '1');
+}
+
+function showPwaPopup() {
+  if (isStandalone()) return;
+  if (localStorage.getItem(PWA_DISMISSED_KEY)) return;
+  const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
+  if (isIOS) {
+    $('pwa-android').style.display = 'none';
+    $('pwa-ios').style.display = '';
+  }
+  const overlay = $('pwa-overlay');
+  overlay.style.display = 'flex';
+  overlay.addEventListener('click', e => { if (e.target === overlay) closePwaPopup(false); });
+}
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+});
+
+window.addEventListener('appinstalled', () => {
+  deferredPrompt = null;
+  closePwaPopup(true);
+});
+
+$('pwa-install-btn').addEventListener('click', async () => {
+  if (deferredPrompt) {
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    deferredPrompt = null;
+    if (outcome === 'accepted') closePwaPopup(true);
+  } else {
+    closePwaPopup(false);
+    alert('Per installare: usa il menu del browser (⋮) → "Aggiungi alla schermata Home".');
+  }
+});
+
+$('pwa-dismiss').addEventListener('click', () => closePwaPopup(false));
+$('pwa-later').addEventListener('click', () => closePwaPopup(false));
+$('pwa-ios-later').addEventListener('click', () => closePwaPopup(true));
+
+if (location.protocol !== 'file:') {
+  setTimeout(showPwaPopup, 3000);
+}
+
+// Rimuovi eventuali Service Worker precedenti (non usiamo SW in questa versione)
+if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+  navigator.serviceWorker.getRegistrations().then(regs => {
+    regs.forEach(r => r.unregister());
+  }).catch(() => {});
+}
+
+// ── AIUTO ────────────────────────────────────────────────
+let screenBeforeHelp = 'screen-load';
+$('btn-help').addEventListener('click', () => {
+  const active = document.querySelector('.screen.active');
+  if (active) screenBeforeHelp = active.id;
+  showScreen('screen-help');
+  $('steps-bar').style.opacity = '0.3';
+});
+$('btn-back-help').addEventListener('click', () => {
+  showScreen(screenBeforeHelp);
+  $('steps-bar').style.opacity = '';
+});
+
+// ── DEBUG PANEL — visibile solo con ?debug=1 ──────────────
+(function() {
+  const debugMode = new URLSearchParams(location.search).get('debug') === '1';
+  const btnDebug = $('btn-debug');
+  if (!debugMode) {
+    if (btnDebug) btnDebug.style.display = 'none';
+  }
+  if (btnDebug) {
+    btnDebug.addEventListener('click', () => {
+      const panel = $('debug-panel');
+      const isHidden = getComputedStyle(panel).display === 'none';
+      panel.style.display = isHidden ? 'block' : 'none';
+      if (isHidden) renderDebugPanel();
+    });
+  }
+})();
+$('debug-close').addEventListener('click', () => {
+  $('debug-panel').style.display = 'none';
+});
+(function() {
+  const DONATED_KEY = 'uninote_donated';
+  if (localStorage.getItem(DONATED_KEY)) return;
+
+  function closePopup() {
+    const overlay = document.getElementById('coffee-overlay');
+    if (!overlay) return;
+    overlay.style.opacity = '0';
+    overlay.style.transition = 'opacity 0.25s';
+    setTimeout(() => { overlay.style.display = 'none'; overlay.style.opacity = ''; }, 260);
+  }
+
+  setTimeout(() => {
+    const overlay = document.getElementById('coffee-overlay');
+    if (!overlay) return;
+    overlay.style.display = 'flex';
+    overlay.addEventListener('click', e => { if (e.target === overlay) closePopup(); });
+    const d = document.getElementById('coffee-dismiss');
+    const k = document.getElementById('coffee-link');
+    const n = document.getElementById('coffee-done');
+    if (d) d.addEventListener('click', closePopup);
+    if (k) k.addEventListener('click', () => { setTimeout(closePopup, 400); });
+    if (n) n.addEventListener('click', () => { localStorage.setItem(DONATED_KEY, '1'); closePopup(); });
+  }, 35000);
+})();
+</script>
+</body>
+</html>
+                                                                                                                                                                                  
