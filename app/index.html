@@ -997,6 +997,7 @@ const state = {
   files: [],          // { file, name, info, zip, dbBytes }
   SQL: null,
   conflicts: [],      // { key, refA, refB, rowA, rowB, chosen: 'A'|'B' }
+  locationMajority: new Map(), // UserMarkGuid -> chiave Location vincente (voto di maggioranza tra i file)
   mergedBytes: null,
   stats: {}
 };
@@ -1328,6 +1329,8 @@ function buildCompare() {
 
   // Conflitti (analisi note con stesso GUID ma testo diverso)
   state.conflicts = findConflicts();
+  // Evidenziazioni con stesso GUID ma Location diversa tra i file: voto di maggioranza
+  state.locationMajority = findLocationMajority();
   if (state.conflicts.length > 0) {
     $('conflicts-wrap').style.display = '';
     $('no-conflicts-notice').style.display = 'none';
@@ -1420,6 +1423,65 @@ function findConflicts() {
   }
 
   return conflicts;
+}
+
+// Pre-scan su TUTTI i file: per ogni UserMarkGuid presente con Location diversa
+// tra i dispositivi (stesso ID locale riusato per pubblicazioni diverse su
+// device differenti), determina la versione corretta per voto di maggioranza.
+// A parità di voti, preferisce la location biblica (BookNumber presente).
+function findLocationMajority() {
+  if (state.files.length < 2 || !sqlReady) return new Map();
+  const dbs = [];
+  const guidVotes = new Map();   // guid -> Map<chiaveLocation, count>
+  const keyIsBook = new Map();   // chiaveLocation -> bool
+
+  try {
+    for (let fi = 0; fi < state.files.length; fi++) {
+      const f = state.files[fi];
+      const db = new state.SQL.Database(f.dbBytes);
+      dbs.push(db);
+      const umTbl  = f.info.tables['usermark'] || f.info.tables['userhighlight'];
+      const locTbl = f.info.tables['location'];
+      if (!umTbl || !locTbl) continue;
+
+      const locKeyMap = new Map();
+      db.exec(`SELECT LocationId, BookNumber, ChapterNumber, DocumentId, Track, IssueTagNumber, KeySymbol, MepsLanguage FROM "${locTbl}"`)
+        .flatMap(r => r.values)
+        .forEach(row => {
+          const key = row.slice(1).join('|');
+          locKeyMap.set(row[0], key);
+          if (!keyIsBook.has(key)) keyIsBook.set(key, row[1] != null);
+        });
+
+      db.exec(`SELECT UserMarkGuid, LocationId FROM "${umTbl}" WHERE UserMarkGuid IS NOT NULL`)
+        .flatMap(r => r.values)
+        .forEach(([guid, locId]) => {
+          const key = locKeyMap.get(locId);
+          if (key == null) return;
+          if (!guidVotes.has(guid)) guidVotes.set(guid, new Map());
+          const votes = guidVotes.get(guid);
+          votes.set(key, (votes.get(key) || 0) + 1);
+        });
+    }
+  } catch(e) { /* silent */ }
+  finally { dbs.forEach(d => { try { d.close(); } catch(e2) {} }); }
+
+  const winner = new Map();
+  for (const [guid, votes] of guidVotes) {
+    if (votes.size < 2) continue; // nessun conflitto per questo GUID
+    let best = null, bestCount = -1, tie = false;
+    for (const [key, count] of votes) {
+      if (count > bestCount) { best = key; bestCount = count; tie = false; }
+      else if (count === bestCount) { tie = true; }
+    }
+    if (tie) {
+      const bookKeys = [...votes.keys()].filter(k => keyIsBook.get(k));
+      if (bookKeys.length === 1) best = bookKeys[0];
+      else continue; // pareggio non risolvibile: lascia decidere il fallback nel merge
+    }
+    winner.set(guid, best);
+  }
+  return winner;
 }
 
 function renderDebugPanel() {
@@ -1844,6 +1906,7 @@ function mergeTable(baseDb, srcDb, baseTOrig, srcTOrig, tl, stats, conflicts, sr
         // Mappa lazy: costruita al primo conflitto
         let baseGuidToLocId = null;
         let locIdIsBook = null;
+        let locIdToKey = null;
         let conflicts = 0;
         return (baseDb, baseTOrig, mappedObj) => {
           const srcLocId = mappedObj[locCol];
@@ -1866,11 +1929,28 @@ function mergeTable(baseDb, srcDb, baseTOrig, srcTOrig, tl, stats, conflicts, sr
           const guid = mappedObj[guidCol];
           const baseLocId = baseGuidToLocId.get(guid);
           if (baseLocId == null || baseLocId === srcLocId) return;
-          // Stessa GUID, LocationId diversa → possibile corruzione
-          const srcIsBook  = locIdIsBook.get(srcLocId)  ?? false;
-          const baseIsBook = locIdIsBook.get(baseLocId) ?? false;
-          // Regola paritaria: preferisci location biblica su rivista (BookNumber NOT NULL > NULL)
-          if (srcIsBook && !baseIsBook) {
+          if (!locIdToKey) {
+            locIdToKey = new Map();
+            try {
+              baseDb.exec('SELECT LocationId, BookNumber, ChapterNumber, DocumentId, Track, IssueTagNumber, KeySymbol, MepsLanguage FROM Location').flatMap(r => r.values)
+                .forEach(row => locIdToKey.set(row[0], row.slice(1).join('|')));
+            } catch(e) {}
+          }
+          // Stessa GUID, LocationId diversa tra file → possibile mancata sincronizzazione
+          const majorityKey = state.locationMajority ? state.locationMajority.get(guid) : null;
+          let shouldUpdate;
+          if (majorityKey != null) {
+            // Voto di maggioranza calcolato su TUTTI i file caricati (pre-scan)
+            const srcMatches  = locIdToKey.get(srcLocId)  === majorityKey;
+            const baseMatches = locIdToKey.get(baseLocId) === majorityKey;
+            shouldUpdate = srcMatches && !baseMatches;
+          } else {
+            // Pareggio o dato insufficiente: regola di fallback (biblica su rivista)
+            const srcIsBook  = locIdIsBook.get(srcLocId)  ?? false;
+            const baseIsBook = locIdIsBook.get(baseLocId) ?? false;
+            shouldUpdate = srcIsBook && !baseIsBook;
+          }
+          if (shouldUpdate) {
             try {
               baseDb.run(`UPDATE "${baseTOrig}" SET "${locCol}"=? WHERE "${guidCol}"=?`,
                 [srcLocId, guid]);
@@ -1878,7 +1958,7 @@ function mergeTable(baseDb, srcDb, baseTOrig, srcTOrig, tl, stats, conflicts, sr
               locIdIsBook.set(srcLocId, true);
               conflicts++;
               if (conflicts === 1)
-                log('warn', `Conflitto pubblicazione UserMark: alcune evidenziazioni puntavano a pubblicazioni diverse tra i file. Usata la versione biblica (regola automatica).`);
+                log('warn', `Conflitto pubblicazione UserMark: alcune evidenziazioni puntavano a pubblicazioni diverse tra i file. Risolto in automatico (maggioranza tra i file, o versione biblica in caso di pareggio).`);
             } catch(e) {}
           }
         };
@@ -1939,9 +2019,15 @@ function mergeTable(baseDb, srcDb, baseTOrig, srcTOrig, tl, stats, conflicts, sr
 
 function buildBlockRangeTransform(baseDb, srcDb, userMarkIdCol) {
   try {
-    const findMarkTbl = db => db.exec(
-      "SELECT name FROM sqlite_master WHERE type='table' AND lower(name) LIKE '%usermark%'"
-    )[0]?.values[0]?.[0] || null;
+    const findMarkTbl = db => {
+      const rows = db.exec("SELECT name FROM sqlite_master WHERE type='table'")
+        .flatMap(r => r.values.map(v => v[0]));
+      // stesso fix di buildLocationIdMap: preferisci il match esatto per evitare
+      // che una futura tabella tipo "UserMarkHistory" venga scelta per errore
+      return rows.find(n => n.toLowerCase() === 'usermark')
+          || rows.find(n => n.toLowerCase().includes('usermark'))
+          || null;
+    };
     const srcTbl = findMarkTbl(srcDb);
     const baseTbl = findMarkTbl(baseDb);
     if (!srcTbl || !baseTbl) return null;
@@ -2097,9 +2183,15 @@ function composeTransforms(...fns) {
 
 function buildLocationIdMap(baseDb, srcDb) {
   try {
-    const findTbl = db => db.exec(
-      "SELECT name FROM sqlite_master WHERE type='table' AND lower(name) LIKE '%location%'"
-    )[0]?.values[0]?.[0] || null;
+    const findTbl = db => {
+      const rows = db.exec("SELECT name FROM sqlite_master WHERE type='table'")
+        .flatMap(r => r.values.map(v => v[0]));
+      // match esatto ("Location") prima del match parziale, altrimenti
+      // "PlaylistItemLocationMap" viene scelta per prima e la mappa risulta vuota
+      return rows.find(n => n.toLowerCase() === 'location')
+          || rows.find(n => n.toLowerCase().includes('location'))
+          || null;
+    };
     const srcTbl = findTbl(srcDb);
     const baseTbl = findTbl(baseDb);
     if (!srcTbl || !baseTbl) return new Map();
