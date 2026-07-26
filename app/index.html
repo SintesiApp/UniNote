@@ -694,7 +694,7 @@
   <div class="app-logo">📖</div>
   <div>
     <div class="app-title">UniNote</div>
-    <div class="app-subtitle">Unisci backup JW Library · dati in locale</div>
+    <div class="app-subtitle">Unisci backup JW Library · dati in locale · <span id="app-version"></span></div>
   </div>
   <div class="header-badge">🔒 Dati al sicuro</div>
   <button class="btn-help" id="btn-debug" title="Debug (solo beta test)">🔧</button>
@@ -993,6 +993,11 @@ window.addEventListener('unhandledrejection', function(e) {
 ════════════════════════════════════════════════════════ */
 
 // ── STATO ───────────────────────────────────────────────
+// Versione app: aggiornare a ogni modifica per riconoscere quale build è online
+const APP_VERSION = 'v1.1.0 · 26/07/2026';
+document.getElementById('app-version').textContent = APP_VERSION;
+console.log('[UniNote] ' + APP_VERSION);
+
 const state = {
   files: [],          // { file, name, info, zip, dbBytes }
   SQL: null,
@@ -1712,7 +1717,7 @@ async function runMerge() {
     setProgress(5, 'Attendo motore SQLite…');
     await waitSQL();
   }
-  log('info', `Inizio unione di ${state.files.length} file`);
+  log('info', `UniNote ${APP_VERSION} — inizio unione di ${state.files.length} file`);
   setProgress(10, 'Lettura file…');
 
   try {
