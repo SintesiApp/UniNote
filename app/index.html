@@ -1750,8 +1750,14 @@ async function runMerge() {
         note: 3, usernote: 3,
         blockrange: 4, blocktextrange: 4,
         bookmark: 5, userbookmark: 5,
-        tagmap: 6, notetagmap: 6,
-        inputfield: 7,
+        // PlaylistItem/IndependentMedia PRIMA di TagMap e delle tabelle mappa:
+        // le loro FK vengono rimappate lì e gli item devono già esistere nel base
+        independentmedia: 6,
+        playlistitem: 7,
+        tagmap: 8, notetagmap: 8,
+        playlistitemlocationmap: 9,
+        playlistitemindependentmediamap: 9,
+        inputfield: 10,
       };
       const sortedTables = Object.entries(srcTables).sort(([a], [b]) => {
         const pa = MERGE_PRIORITY[a] ?? 99;
@@ -1827,6 +1833,27 @@ async function runMerge() {
     const outZip = new JSZip();
     outZip.file('userData.db', dbOut);
 
+    // Copia i file multimediali (immagini/video delle playlist, miniature)
+    // da TUTTI i backup sorgente — senza questi le playlist perdono i media
+    let mediaCount = 0;
+    const mediaSeen = new Set();
+    for (const f of state.files) {
+      if (!f.zip) continue;
+      for (const name of Object.keys(f.zip.files)) {
+        const lower = name.toLowerCase();
+        if (lower === 'manifest.json' || lower === 'userdata.db') continue;
+        const entry = f.zip.files[name];
+        if (entry.dir || mediaSeen.has(name)) continue;
+        try {
+          const content = await entry.async('uint8array');
+          outZip.file(name, content);
+          mediaSeen.add(name);
+          mediaCount++;
+        } catch(e) {}
+      }
+    }
+    if (mediaCount > 0) log('info', `Inclusi ${mediaCount} file multimediali dai backup originali`);
+
     // Prendi manifest dal primo file, aggiorna date
     let manifest = {};
     const mf = baseZip.file('manifest.json');
@@ -1874,7 +1901,10 @@ function mergeTable(baseDb, srcDb, baseTOrig, srcTOrig, tl, stats, conflicts, sr
   if (!colRes.length) return;
   const cols = colRes[0].values.map(v => ({ idx: v[0], name: v[1], pk: v[5] }));
   const colNames = cols.map(c => c.name);
-  const pkCol = cols.find(c => c.pk === 1)?.name;
+  // PK composta (es. InputField: LocationId+TextTag, PlaylistItem*Map): nessuna
+  // colonna va rinumerata con MAX+1 — remapPK corromperebbe la prima colonna
+  const pkColsAll = cols.filter(c => c.pk > 0);
+  const pkCol = pkColsAll.length === 1 ? pkColsAll[0].name : null;
 
   // Identifica chiave semantica
   const semanticKey = getSemanticKey(tl, colNames);
@@ -1991,7 +2021,57 @@ function mergeTable(baseDb, srcDb, baseTOrig, srcTOrig, tl, stats, conflicts, sr
     const locMap = buildLocationIdMap(baseDb, srcDb);
     const locCol = colNames.find(c => /^locationid$/i.test(c));
     const t3 = makeFkTransform(locCol, locMap);
-    rowTransform = composeTransforms(t1, t2, t3);
+    // PlaylistItemId → PlaylistItem (per etichette assegnate alle playlist)
+    const plMap = buildPlaylistItemIdMap(baseDb, srcDb);
+    const plCol = colNames.find(c => /^playlistitemid$/i.test(c));
+    const t4 = makeFkTransform(plCol, plMap);
+    // Position: rinumera per non violare UNIQUE(TagId, Position) sugli insert
+    const posCol = colNames.find(c => /^position$/i.test(c));
+    let t5 = null;
+    if (posCol && tagCol) {
+      let nextPos = null;
+      t5 = rowObj => {
+        if (!nextPos) {
+          nextPos = new Map();
+          try {
+            baseDb.exec(`SELECT "${tagCol}", MAX("${posCol}") FROM "${baseTOrig}" GROUP BY "${tagCol}"`)
+              .flatMap(r => r.values)
+              .forEach(([tid, mx]) => nextPos.set(tid, (mx ?? -1) + 1));
+          } catch(e) {}
+        }
+        const tid = rowObj[tagCol];
+        if (tid == null) return rowObj;
+        const p = nextPos.get(tid) ?? 0;
+        nextPos.set(tid, p + 1);
+        return { ...rowObj, [posCol]: p };
+      };
+    }
+    rowTransform = composeTransforms(t1, t2, t3, t4, t5);
+  }
+
+  if (tl === 'inputfield') {
+    // LocationId → Location (risposte nei campi testo delle pubblicazioni)
+    const locMap = buildLocationIdMap(baseDb, srcDb);
+    const locCol = colNames.find(c => /^locationid$/i.test(c));
+    rowTransform = makeFkTransform(locCol, locMap);
+  }
+
+  if (tl === 'playlistitemlocationmap') {
+    const locMap = buildLocationIdMap(baseDb, srcDb);
+    const plMap = buildPlaylistItemIdMap(baseDb, srcDb);
+    const locCol = colNames.find(c => /^locationid$/i.test(c));
+    const plCol = colNames.find(c => /^playlistitemid$/i.test(c));
+    rowTransform = composeTransforms(
+      makeFkTransform(plCol, plMap), makeFkTransform(locCol, locMap));
+  }
+
+  if (tl === 'playlistitemindependentmediamap') {
+    const plMap = buildPlaylistItemIdMap(baseDb, srcDb);
+    const imMap = buildIndependentMediaIdMap(baseDb, srcDb);
+    const plCol = colNames.find(c => /^playlistitemid$/i.test(c));
+    const imCol = colNames.find(c => /^independentmediaid$/i.test(c));
+    rowTransform = composeTransforms(
+      makeFkTransform(plCol, plMap), makeFkTransform(imCol, imMap));
   }
 
   if (tl === 'bookmark' || tl === 'userbookmark') {
@@ -2081,8 +2161,10 @@ function getSemanticKey(tl, cols) {
     if (keys.length) return keys;
   }
   if (tl === 'tagmap' || tl === 'notetagmap') {
-    const keys = cols.filter(c => /noteid|tagid/i.test(c));
-    if (keys.length >= 2) return keys.slice(0,2);
+    // Chiave estesa: include PlaylistItemId e LocationId, altrimenti tutte le
+    // assegnazioni playlist/location dello stesso tag (NoteId NULL) collassano in una
+    const keys = cols.filter(c => /^(tagid|noteid|playlistitemid|locationid)$/i.test(c));
+    if (keys.length >= 2) return keys;
   }
   if (tl === 'location') {
     // Chiave estesa: include KeySymbol e MepsLanguage per distinguere
@@ -2093,6 +2175,11 @@ function getSemanticKey(tl, cols) {
   if (tl === 'playlist' || tl === 'playlistitem') {
     const keys = cols.filter(c => /uniqueid|guid/i.test(c));
     if (keys.length) return keys.slice(0,1);
+    // Schema senza GUID: identità = Label + trim + EndAction.
+    // ThumbnailFilePath escluso (percorso specifico del dispositivo):
+    // senza questa chiave lo stesso item si duplica tra dispositivi
+    const keys2 = cols.filter(c => /^(label|starttrimoffsetticks|endtrimoffsetticks|endaction)$/i.test(c));
+    if (keys2.length >= 2) return keys2;
   }
   return [];
 }
@@ -2169,6 +2256,51 @@ function buildTagIdMap(baseDb, srcDb) {
       const bid = baseNameToId.get(name);
       if (bid !== undefined) map.set(sid, bid);
     }
+    return map;
+  } catch(e) { return new Map(); }
+}
+
+// Mappa PlaylistItemId: src→base via identità (Label + trim + EndAction).
+// ThumbnailFilePath escluso: è un percorso file specifico del dispositivo.
+function buildPlaylistItemIdMap(baseDb, srcDb) {
+  try {
+    const findTbl = db => {
+      const rows = db.exec("SELECT name FROM sqlite_master WHERE type='table'")
+        .flatMap(r => r.values.map(v => v[0]));
+      return rows.find(n => n.toLowerCase() === 'playlistitem') || null;
+    };
+    const srcTbl = findTbl(srcDb);
+    const baseTbl = findTbl(baseDb);
+    if (!srcTbl || !baseTbl) return new Map();
+    const q = tbl => `SELECT PlaylistItemId, Label, StartTrimOffsetTicks, EndTrimOffsetTicks, EndAction FROM "${tbl}"`;
+    const keyOf = r => r.slice(1).map(v => v == null ? '' : v).join('|');
+    const baseK = new Map();
+    baseDb.exec(q(baseTbl)).flatMap(r => r.values)
+      .forEach(r => { const k = keyOf(r); if (!baseK.has(k)) baseK.set(k, r[0]); });
+    const map = new Map();
+    srcDb.exec(q(srcTbl)).flatMap(r => r.values)
+      .forEach(r => { const bid = baseK.get(keyOf(r)); if (bid !== undefined) map.set(r[0], bid); });
+    return map;
+  } catch(e) { return new Map(); }
+}
+
+// Mappa IndependentMediaId: src→base via Hash del contenuto (stabile tra dispositivi)
+function buildIndependentMediaIdMap(baseDb, srcDb) {
+  try {
+    const findTbl = db => {
+      const rows = db.exec("SELECT name FROM sqlite_master WHERE type='table'")
+        .flatMap(r => r.values.map(v => v[0]));
+      return rows.find(n => n.toLowerCase() === 'independentmedia') || null;
+    };
+    const srcTbl = findTbl(srcDb);
+    const baseTbl = findTbl(baseDb);
+    if (!srcTbl || !baseTbl) return new Map();
+    const baseK = new Map();
+    baseDb.exec(`SELECT IndependentMediaId, Hash FROM "${baseTbl}"`).flatMap(r => r.values)
+      .forEach(([id, h]) => { if (!baseK.has(h)) baseK.set(h, id); });
+    const map = new Map();
+    srcDb.exec(`SELECT IndependentMediaId, Hash FROM "${srcTbl}"`).flatMap(r => r.values)
+      .forEach(([id, h]) => { const bid = baseK.get(h); if (bid !== undefined) map.set(id, bid); });
     return map;
   } catch(e) { return new Map(); }
 }
@@ -2320,7 +2452,8 @@ function mergeByKey(baseDb, srcDb, baseTOrig, srcTOrig, colNames, pkCol,
 function mergeByFingerprint(baseDb, srcDb, baseTOrig, srcTOrig, colNames, pkCol, tl, stats, rowTransform = null) {
   const colStr = colNames.map(c => `"${c}"`).join(', ');
   const placeholders = colNames.map(() => '?').join(', ');
-  const pkIdx = pkCol ? colNames.indexOf(pkCol) : 0;
+  // pkCol null (PK composta): il fingerprint include TUTTE le colonne
+  const pkIdx = pkCol ? colNames.indexOf(pkCol) : -1;
 
   const existing = new Set();
   baseDb.exec(`SELECT ${colStr} FROM "${baseTOrig}"`).flatMap(r => r.values)
@@ -2534,6 +2667,7 @@ $('btn-download').addEventListener('click', async () => {
 $('btn-restart').addEventListener('click', () => {
   state.files = [];
   state.conflicts = [];
+  state.locationMajority = new Map();
   state.mergedBytes = null;
   state.stats = {};
   $('file-list').innerHTML = '';
