@@ -1066,6 +1066,10 @@
     <button class="coffee-dismiss" id="changelog-dismiss" title="Chiudi">✕</button>
     <div class="changelog-title">📋 Novità di UniNote</div>
 
+    <div class="changelog-ver">v1.2.0 <span>24 agosto 2026</span></div>
+      <ul class="changelog-list">
+        <li>Pulsante "Segnala problema" — apre il client email con diagnostica pre-compilata</li>
+      </ul>
     <div class="changelog-ver">v1.1.0 <span>26 luglio 2026</span></div>
     <ul class="changelog-list">
       <li>Risolto: note ed evidenziazioni recenti potevano risultare collegate alla pubblicazione sbagliata nel file unito</li>
@@ -1123,7 +1127,7 @@ window.addEventListener('unhandledrejection', function(e) {
 
 // ── STATO ───────────────────────────────────────────────
 // Versione app: aggiornare a ogni modifica per riconoscere quale build è online
-const APP_VERSION = 'v1.1.0 · 26/07/2026';
+const APP_VERSION = 'v1.2.0 · 24/08/2026';
 document.getElementById('app-version').textContent = APP_VERSION;
 document.getElementById('app-version').title = 'Novità di questa versione';
 console.log('[UniNote] ' + APP_VERSION);
