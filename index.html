@@ -1083,6 +1083,30 @@
   </div>
 </div>
 
+<!-- ═══ BUG REPORT MODALE ═══ -->
+<div id="bug-overlay">
+  <div id="bug-panel">
+    <div class="bug-hdr">
+      <div>
+        <div class="bug-title">🐛 Segnala un problema</div>
+        <div class="bug-sub">Apre il tuo client email con le info già compilate</div>
+      </div>
+      <button class="bug-close" id="btn-bug-close">✕</button>
+    </div>
+    <div class="bug-label">Descrivi il problema riscontrato:</div>
+    <textarea id="bug-desc" class="bug-textarea"
+      placeholder="Es: ho caricato 2 file ma l'unione ha mostrato un errore…"></textarea>
+    <div class="bug-diag-title">Info tecniche (allegate automaticamente)</div>
+    <div class="bug-diag-box" id="bug-diag-box"></div>
+    <button class="btn btn-primary" id="btn-bug-send" style="margin-top:14px;width:100%">
+      ✉️&nbsp; Invia segnalazione
+    </button>
+    <div class="bug-footer">Verrà aperto il tuo client email · nessun dato inviato automaticamente</div>
+  </div>
+</div>
+
+<button class="bug-fab" id="btn-bug-open">🐛 Segnala problema</button>
+
 <script>
 window.addEventListener('error', function(e) {
   alert('⚠️ Errore JS: ' + e.message + '\nRiga: ' + e.lineno);
@@ -2987,29 +3011,6 @@ $('debug-close').addEventListener('click', () => {
 })();
 </script>
 
-<!-- ═══ BUG REPORT MODALE ═══ -->
-<div id="bug-overlay">
-  <div id="bug-panel">
-    <div class="bug-hdr">
-      <div>
-        <div class="bug-title">🐛 Segnala un problema</div>
-        <div class="bug-sub">Apre il tuo client email con le info già compilate</div>
-      </div>
-      <button class="bug-close" id="btn-bug-close">✕</button>
-    </div>
-    <div class="bug-label">Descrivi il problema riscontrato:</div>
-    <textarea id="bug-desc" class="bug-textarea"
-      placeholder="Es: ho caricato 2 file ma l'unione ha mostrato un errore…"></textarea>
-    <div class="bug-diag-title">Info tecniche (allegate automaticamente)</div>
-    <div class="bug-diag-box" id="bug-diag-box"></div>
-    <button class="btn btn-primary" id="btn-bug-send" style="margin-top:14px;width:100%">
-      ✉️&nbsp; Invia segnalazione
-    </button>
-    <div class="bug-footer">Verrà aperto il tuo client email · nessun dato inviato automaticamente</div>
-  </div>
-</div>
-
-<button class="bug-fab" id="btn-bug-open">🐛 Segnala problema</button>
 </body>
 </html>
                                                                                                                                                                                   
