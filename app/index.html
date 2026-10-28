@@ -1005,6 +1005,16 @@
     <button class="coffee-dismiss" id="changelog-dismiss" title="Chiudi">✕</button>
     <div class="changelog-title">📋 Novità di UniNote</div>
 
+    <div class="changelog-ver">v1.2.0 <span>28 ottobre 2026</span></div>
+    <ul class="changelog-list">
+      <li>Risolto: nelle playlist, elementi con lo stesso nome (es. “Discorsi pubblici”, “Congresso 1.jpg”) venivano uniti e i loro file si accumulavano sull’elemento sbagliato</li>
+      <li>Note in conflitto: ora si vede la data dell’ultima modifica e per impostazione predefinita viene scelta la versione più recente, non quella del primo file</li>
+      <li>Note uguali nel testo ma con collegamento a evidenziazione/pubblicazione diverso: vince la modifica più recente</li>
+      <li>Segnalate le evidenziazioni con lo stesso identificativo ma colore o pubblicazione diversi tra i file</li>
+      <li>Il file unito ora ha l’hash corretto nel manifest</li>
+      <li>Verifica finale più completa: il risultato viene ricontrollato contro i file di partenza (evidenziazioni e note mancanti, versioni vecchie, integrità, playlist)</li>
+    </ul>
+
     <div class="changelog-ver">v1.1.0 <span>26 luglio 2026</span></div>
     <ul class="changelog-list">
       <li>Risolto: note ed evidenziazioni recenti potevano risultare collegate alla pubblicazione sbagliata nel file unito</li>
@@ -1038,7 +1048,7 @@ window.addEventListener('unhandledrejection', function(e) {
 
 // ── STATO ───────────────────────────────────────────────
 // Versione app: aggiornare a ogni modifica per riconoscere quale build è online
-const APP_VERSION = 'v1.1.0 · 26/07/2026';
+const APP_VERSION = 'v1.2.0 · 28/10/2026';
 document.getElementById('app-version').textContent = APP_VERSION;
 document.getElementById('app-version').title = 'Novità di questa versione';
 console.log('[UniNote] ' + APP_VERSION);
@@ -1420,20 +1430,21 @@ function findConflicts() {
       dbs.push(db);
       const tbl = f.info.tables['note'] || f.info.tables['usernote'];
       if (!tbl) continue;
-      db.exec(`SELECT Guid, Title, Content FROM "${tbl}" WHERE Guid IS NOT NULL`)
+      db.exec(`SELECT Guid, Title, Content, LastModified FROM "${tbl}" WHERE Guid IS NOT NULL`)
         .flatMap(r => r.values)
-        .forEach(([g, t, c]) => {
+        .forEach(([g, t, c, lm]) => {
           const title   = t || '';
           const content = c || '';
-          const fp      = title + ' ' + content;
+          const fp      = title + '\u0000' + content;
           if (!guidMap.has(g)) guidMap.set(g, new Map());
           const variants = guidMap.get(g);
           if (!variants.has(fp)) {
-            variants.set(fp, { title, content, fileIndices: [], fileNames: [] });
+            variants.set(fp, { title, content, lm: '', fileIndices: [], fileNames: [] });
           }
           const v = variants.get(fp);
           v.fileIndices.push(fi);
           v.fileNames.push(f.name);
+          if ((lm || '') > v.lm) v.lm = lm || '';
         });
     }
   } catch(e) { /* silent */ }
@@ -1456,11 +1467,15 @@ function findConflicts() {
       // varianti diverse → conflitto
       // Ordina: prima la variante del file 0 (base), poi le altre in ordine di primo fileIndex
       varArr.sort((a, b) => a.fileIndices[0] - b.fileIndices[0]);
+      // Versione predefinita: quella modificata per ultima (a parità, la prima)
+      let bestIdx = 0;
+      varArr.forEach((v, i) => { if ((v.lm || '') > (varArr[bestIdx].lm || '')) bestIdx = i; });
       const conflict = {
         guid,
         title: varArr[0].title || varArr.find(v => v.title)?.title || 'Nota senza titolo',
         variants: varArr,   // [{ title, content, fileIndices, fileNames }]
-        chosen: 0           // indice in variants (0 = tieni versione base/file0)
+        chosen: bestIdx,    // indice in variants: predefinito = versione più recente
+        defaultChosen: bestIdx
       };
       // Compat backward: c.a = variants[0], c.b = variants[1]
       Object.defineProperty(conflict, 'a', { get: () => conflict.variants[0] });
@@ -1660,6 +1675,9 @@ function renderDebugPanel() {
     v.info.forEach(m => {
       html += `<div class="debug-stat-row"><span>${escD(m)}</span></div>`;
     });
+    (v.notices || []).forEach(m => {
+      html += `<div class="debug-stat-row" style="color:#b45309"><span>ℹ️ ${escD(m)}</span></div>`;
+    });
   }
 
   // ── Inventario FK dai file caricati (schema live)
@@ -1693,6 +1711,12 @@ function renderDebugPanel() {
   el.innerHTML = html || '<div class="debug-empty">Nessun dato da mostrare.</div>';
 }
 
+function fmtNoteDate(iso) {
+  try {
+    return new Date(iso).toLocaleString('it-IT', { day:'2-digit', month:'2-digit', year:'2-digit', hour:'2-digit', minute:'2-digit' });
+  } catch(e) { return iso; }
+}
+
 function renderConflicts() {
   const list = $('conflict-list');
   list.innerHTML = '';
@@ -1707,14 +1731,14 @@ function renderConflicts() {
       const fnames = v.fileNames.slice(0, 2).map(n => truncate(n, 20)).join(', ')
                    + (v.fileNames.length > 2 ? ` +${v.fileNames.length - 2}` : '');
       return `<div class="conflict-side ${sideClass}">
-        <div class="conflict-side-label">📄 ${escHtml(fnames)}</div>
+        <div class="conflict-side-label">📄 ${escHtml(fnames)}${v.lm ? ' · modificata ' + escHtml(fmtNoteDate(v.lm)) : ''}${(v.lm && c.variants.every((o, oi) => oi === vi || (o.lm || '') < v.lm)) ? ' ⭐ più recente' : ''}</div>
         <div class="conflict-text">${escHtml((v.content||'').slice(0,200))}</div>
       </div>`;
     }).join('');
 
     // Pulsanti "Tieni" uno per variante + Entrambe + Unisci
     const keepBtns = c.variants.map((v, vi) => {
-      const sel = c.chosen === vi ? 'selected-A' : '';
+      const sel = c.chosen === vi ? (vi === 0 ? 'selected-A' : 'selected-B') : '';
       const fname = truncate(v.fileNames[0] || `File ${vi+1}`, 16);
       return `<button type="button" class="conflict-choice ${sel}" data-ci="${i}" data-choice="${vi}">✔ ${escHtml(fname)}</button>`;
     }).join('');
@@ -1792,12 +1816,15 @@ async function runMerge() {
       .forEach(t => baseTables[t.toLowerCase()] = t);
 
     const stats = { notes:0, highlights:0, bookmarks:0, tags:0, other:0, skipped:0 };
+    mergeReport = { markColor: [], markPub: new Set() };
     const step = 60 / (state.files.length - 1);
 
     for (let fi = 1; fi < state.files.length; fi++) {
       setProgress(20 + step * fi, `Unione file ${fi+1}/${state.files.length}…`);
       log('info', `Elaboro: ${state.files[fi].name}`);
       const srcDb = new state.SQL.Database(state.files[fi].dbBytes);
+      currentPlaylistMap = null; currentPlaylistMatched = new Set();
+      currentBaseHadMedia = new Set(); currentBaseHadLoc = new Set();
       const srcTables = {};
       srcDb.exec("SELECT name FROM sqlite_master WHERE type='table'")
         .flatMap(r => r.values.map(v => v[0]))
@@ -1924,6 +1951,11 @@ async function runMerge() {
     }
     const nowStr = new Date().toISOString().replace(/\.\d{3}Z$/, '+00:00');
     if (!manifest.userDataBackup) manifest.userDataBackup = {};
+    // Hash SHA-256 del database risultante (prima restava quello del primo file)
+    try {
+      const digest = await crypto.subtle.digest('SHA-256', dbOut);
+      manifest.userDataBackup.hash = Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, '0')).join('');
+    } catch(e) { log('warn', 'Hash del manifest non ricalcolato: ' + e.message); }
     manifest.userDataBackup.lastModifiedDate = nowStr;
     manifest.creationDate = nowStr;
     outZip.file('manifest.json', JSON.stringify(manifest, null, 2));
@@ -1939,11 +1971,13 @@ async function runMerge() {
       setProgress(100, 'Completato!');
       log('ok', '✓ File unito creato con successo');
       validation.info.forEach(m => log('info', m));
+      (validation.notices || []).forEach(m => log('warn', 'ℹ ' + m));
     } else {
       setProgress(100, 'Completato con avvisi');
       log('warn', '⚠ Validazione: trovati problemi nel file generato');
       validation.warnings.forEach(w => log('err', '  • ' + w));
       validation.info.forEach(m => log('info', m));
+      (validation.notices || []).forEach(m => log('warn', 'ℹ ' + m));
     }
 
     setTimeout(() => {
@@ -1956,6 +1990,13 @@ async function runMerge() {
     alert('Errore durante l\'unione:\n' + e.message);
   }
 }
+
+// ── Stato condiviso del merge in corso (azzerato a ogni unione / file sorgente) ──
+let currentPlaylistMap = null;            // PlaylistItemId sorgente → base
+let currentPlaylistMatched = new Set();   // id base abbinati a un elemento del file sorgente
+let currentBaseHadMedia = new Set();      // id base che avevano già file collegati
+let currentBaseHadLoc = new Set();        // id base che avevano già collegamenti a pubblicazioni
+let mergeReport = { markColor: [], markPub: new Set() };
 
 function mergeTable(baseDb, srcDb, baseTOrig, srcTOrig, tl, stats, conflicts, srcFileIndex) {
   // Ottieni colonne
@@ -1971,8 +2012,15 @@ function mergeTable(baseDb, srcDb, baseTOrig, srcTOrig, tl, stats, conflicts, sr
   // Identifica chiave semantica
   const semanticKey = getSemanticKey(tl, colNames);
 
+  // PlaylistItem: abbinamento uno a uno (etichetta + tagli + miniatura), vedi mergePlaylistItems
+  if (tl === 'playlistitem') {
+    mergePlaylistItems(baseDb, srcDb, baseTOrig, srcTOrig, colNames, pkCol, stats);
+    return;
+  }
+
   // Rimappa FK — costruisce rowTransform per ogni tabella che ha FK a PK variabili
   let rowTransform = null;
+  let rowFilter = null;
 
   // Helper: crea transform per una singola colonna FK tramite una Map
   const makeFkTransform = (col, map) => {
@@ -2030,6 +2078,7 @@ function mergeTable(baseDb, srcDb, baseTOrig, srcTOrig, tl, stats, conflicts, sr
           }
           // Stessa GUID, LocationId diversa tra file → possibile mancata sincronizzazione
           const majorityKey = state.locationMajority ? state.locationMajority.get(guid) : null;
+          mergeReport.markPub.add(guid);
           let shouldUpdate;
           if (majorityKey != null) {
             // Voto di maggioranza calcolato su TUTTI i file caricati (pre-scan)
@@ -2125,6 +2174,8 @@ function mergeTable(baseDb, srcDb, baseTOrig, srcTOrig, tl, stats, conflicts, sr
     const plCol = colNames.find(c => /^playlistitemid$/i.test(c));
     rowTransform = composeTransforms(
       makeFkTransform(plCol, plMap), makeFkTransform(locCol, locMap));
+    // Per un elemento già presente nel base e già collegato, non si aggiungono i collegamenti del sorgente
+    rowFilter = rowObj => !(currentPlaylistMatched.has(rowObj[plCol]) && currentBaseHadLoc.has(rowObj[plCol]));
   }
 
   if (tl === 'playlistitemindependentmediamap') {
@@ -2134,6 +2185,8 @@ function mergeTable(baseDb, srcDb, baseTOrig, srcTOrig, tl, stats, conflicts, sr
     const imCol = colNames.find(c => /^independentmediaid$/i.test(c));
     rowTransform = composeTransforms(
       makeFkTransform(plCol, plMap), makeFkTransform(imCol, imMap));
+    // Per un elemento già presente nel base e già con file collegati, non si aggiungono quelli del sorgente
+    rowFilter = rowObj => !(currentPlaylistMatched.has(rowObj[plCol]) && currentBaseHadMedia.has(rowObj[plCol]));
   }
 
   if (tl === 'bookmark' || tl === 'userbookmark') {
@@ -2155,7 +2208,7 @@ function mergeTable(baseDb, srcDb, baseTOrig, srcTOrig, tl, stats, conflicts, sr
     mergeByKey(baseDb, srcDb, baseTOrig, srcTOrig, colNames, pkCol,
                semanticKey, tl, stats, conflicts, srcFileIndex, rowTransform, skipResolver);
   } else {
-    mergeByFingerprint(baseDb, srcDb, baseTOrig, srcTOrig, colNames, pkCol, tl, stats, rowTransform);
+    mergeByFingerprint(baseDb, srcDb, baseTOrig, srcTOrig, colNames, pkCol, tl, stats, rowTransform, rowFilter);
   }
 }
 
@@ -2322,9 +2375,70 @@ function buildTagIdMap(baseDb, srcDb) {
   } catch(e) { return new Map(); }
 }
 
+function findTableCI(db, name) {
+  return db.exec("SELECT name FROM sqlite_master WHERE type='table'")
+    .flatMap(r => r.values.map(v => v[0])).find(n => n.toLowerCase() === name) || null;
+}
+
+// Identità di un elemento playlist: etichetta + tagli + azione finale + miniatura
+// (hash del contenuto, altrimenti percorso). Elementi con la stessa identità si
+// abbinano UNO A UNO per posizione: prima di v1.2.0 tutti finivano sul primo.
+function playlistKeyRows(db) {
+  const tbl = findTableCI(db, 'playlistitem');
+  if (!tbl) return [];
+  const im = findTableCI(db, 'independentmedia');
+  const thumb = im ? `(SELECT m.Hash FROM "${im}" m WHERE m.FilePath = p.ThumbnailFilePath)` : 'NULL';
+  const res = db.exec(`SELECT p.PlaylistItemId, p.Label, p.StartTrimOffsetTicks, p.EndTrimOffsetTicks, p.EndAction, ${thumb}, p.ThumbnailFilePath FROM "${tbl}" p ORDER BY p.PlaylistItemId`);
+  if (!res.length) return [];
+  return res[0].values.map(r => ({
+    id: r[0],
+    key: [r[1], r[2], r[3], r[4], r[5] || r[6] || ''].map(v => v == null ? '' : v).join('|')
+  }));
+}
+
+function mergePlaylistItems(baseDb, srcDb, baseTOrig, srcTOrig, colNames, pkCol, stats) {
+  const group = rows => { const m = new Map(); rows.forEach(r => { if (!m.has(r.key)) m.set(r.key, []); m.get(r.key).push(r.id); }); return m; };
+  const baseG = group(playlistKeyRows(baseDb));
+  const srcG  = group(playlistKeyRows(srcDb));
+  const idsOf = (db, tblName) => {
+    const t = findTableCI(db, tblName);
+    if (!t) return new Set();
+    const r = db.exec(`SELECT DISTINCT PlaylistItemId FROM "${t}"`);
+    return new Set(r.length ? r[0].values.map(v => v[0]) : []);
+  };
+  currentBaseHadMedia = idsOf(baseDb, 'playlistitemindependentmediamap');
+  currentBaseHadLoc   = idsOf(baseDb, 'playlistitemlocationmap');
+  currentPlaylistMatched = new Set();
+
+  const colStr = colNames.map(c => `"${c}"`).join(', ');
+  const ph = colNames.map(() => '?').join(', ');
+  const srcRowData = new Map();
+  srcDb.exec(`SELECT ${colStr} FROM "${srcTOrig}"`).flatMap(r => r.values).forEach(row => {
+    const o = {}; colNames.forEach((c, i) => o[c] = row[i]); srcRowData.set(o[pkCol], o);
+  });
+
+  const map = new Map();
+  let added = 0;
+  for (const [key, srcIds] of srcG) {
+    const baseIds = baseG.get(key) || [];
+    srcIds.forEach((sid, i) => {
+      if (i < baseIds.length) { map.set(sid, baseIds[i]); currentPlaylistMatched.add(baseIds[i]); return; }
+      const values = remapPK(baseDb, baseTOrig, colNames, pkCol, srcRowData.get(sid));
+      try {
+        baseDb.run(`INSERT INTO "${baseTOrig}" (${colStr}) VALUES (${ph})`, values);
+        map.set(sid, values[colNames.indexOf(pkCol)]);
+        added++;
+      } catch(e) { stats.skipped++; }
+    });
+  }
+  currentPlaylistMap = map;
+  updateStats(stats, 'playlistitem', added);
+}
+
 // Mappa PlaylistItemId: src→base via identità (Label + trim + EndAction).
 // ThumbnailFilePath escluso: è un percorso file specifico del dispositivo.
 function buildPlaylistItemIdMap(baseDb, srcDb) {
+  if (currentPlaylistMap) return currentPlaylistMap;
   try {
     const findTbl = db => {
       const rows = db.exec("SELECT name FROM sqlite_master WHERE type='table'")
@@ -2433,6 +2547,18 @@ function mergeByKey(baseDb, srcDb, baseTOrig, srcTOrig, colNames, pkCol,
   // righe sorgente
   const srcRows = srcDb.exec(`SELECT ${colStr} FROM "${srcTOrig}"`).flatMap(r => r.values);
 
+  // Colori delle evidenziazioni già nel base (per segnalare i conflitti di colore)
+  let markBase = null;
+  if (tl === 'usermark' || tl === 'userhighlight') {
+    const gC = colNames.find(c => /^usermarkguid$/i.test(c));
+    const cC = colNames.find(c => /^colorindex$/i.test(c));
+    if (gC && cC) {
+      markBase = { g: gC, c: cC, m: new Map() };
+      baseDb.exec(`SELECT "${gC}", "${cC}" FROM "${baseTOrig}"`).flatMap(r => r.values)
+        .forEach(([g, c]) => markBase.m.set(g, c));
+    }
+  }
+
   let added = 0;
   for (const row of srcRows) {
     const rowObj = {};
@@ -2456,7 +2582,7 @@ function mergeByKey(baseDb, srcDb, baseTOrig, srcTOrig, colNames, pkCol,
             const srcTitle = rowObj['Title'] || rowObj['title'] || '';
             const srcFile  = conflict.variants.find(v => v.fileIndices.includes(srcFileIndex));
             const label    = srcFile ? ' (copia ' + truncate(srcFile.fileNames[0] || String(srcFileIndex), 12) + ')' : ' (copia)';
-            const newRowObj = { ...rowObj, [pkCol]: null, [guidCol]: newGuid,
+            const newRowObj = { ...mappedObj, [pkCol]: null, [guidCol]: newGuid,
               Title: srcTitle + label };
             const values = remapPK(baseDb, baseTOrig, colNames, pkCol, newRowObj);
             try {
@@ -2484,12 +2610,32 @@ function mergeByKey(baseDb, srcDb, baseTOrig, srcTOrig, colNames, pkCol,
             if (myVariantIdx > 0 && myVariantIdx === chosen) {
               // Questa è la versione scelta e non è già quella nel base (indice 0)
               const sets = colNames.filter(c => c !== pkCol).map(c => `"${c}" = ?`).join(', ');
-              const vals = [...colNames.filter(c => c !== pkCol).map(c => rowObj[c]), rowObj[guidCol]];
+              const vals = [...colNames.filter(c => c !== pkCol).map(c => mappedObj[c] ?? null), rowObj[guidCol]];
               try { baseDb.run(`UPDATE "${baseTOrig}" SET ${sets} WHERE "${guidCol}" = ?`, vals); } catch(e) {}
             }
             // chosen === 0 o variante non scelta: non fare nulla (già nel base o non voluta)
           }
+        } else {
+          // Stesso testo in tutti i file: i metadati (collegamento all'evidenziazione,
+          // pubblicazione, data) più recenti vincono, non quelli del primo file.
+          try {
+            const lmCol = colNames.find(c => /^lastmodified$/i.test(c));
+            if (lmCol && mappedObj[lmCol]) {
+              const cur = baseDb.exec(`SELECT "${lmCol}" FROM "${baseTOrig}" WHERE "${guidCol}" = ?`, [rowObj[guidCol]])[0]?.values[0][0];
+              if (cur && String(mappedObj[lmCol]) > String(cur)) {
+                const upCols = colNames.filter(c => c !== pkCol && c !== guidCol);
+                baseDb.run(`UPDATE "${baseTOrig}" SET ${upCols.map(c => `"${c}" = ?`).join(', ')} WHERE "${guidCol}" = ?`,
+                  [...upCols.map(c => mappedObj[c] ?? null), rowObj[guidCol]]);
+              }
+            }
+          } catch(e) {}
         }
+      }
+      // Evidenziazione con stesso GUID ma colore diverso tra i file: si segnala
+      if (markBase) {
+        const bc = markBase.m.get(mappedObj[markBase.g]);
+        if (bc !== undefined && bc !== mappedObj[markBase.c])
+          mergeReport.markColor.push({ guid: mappedObj[markBase.g], base: bc, src: mappedObj[markBase.c], file: state.files[srcFileIndex]?.name || '' });
       }
       if (skipResolver) skipResolver(baseDb, baseTOrig, mappedObj);
       stats.skipped++;
@@ -2511,7 +2657,7 @@ function mergeByKey(baseDb, srcDb, baseTOrig, srcTOrig, colNames, pkCol,
   updateStats(stats, tl, added);
 }
 
-function mergeByFingerprint(baseDb, srcDb, baseTOrig, srcTOrig, colNames, pkCol, tl, stats, rowTransform = null) {
+function mergeByFingerprint(baseDb, srcDb, baseTOrig, srcTOrig, colNames, pkCol, tl, stats, rowTransform = null, rowFilter = null) {
   const colStr = colNames.map(c => `"${c}"`).join(', ');
   const placeholders = colNames.map(() => '?').join(', ');
   // pkCol null (PK composta): il fingerprint include TUTTE le colonne
@@ -2530,6 +2676,7 @@ function mergeByFingerprint(baseDb, srcDb, baseTOrig, srcTOrig, colNames, pkCol,
     let rowObj = {};
     colNames.forEach((c, i) => rowObj[c] = row[i]);
     if (rowTransform) rowObj = rowTransform(rowObj) || rowObj;
+    if (rowFilter && !rowFilter(rowObj)) { stats.skipped++; continue; }
     const fp = colNames.filter(c => c !== pkCol).map(c => rowObj[c]).join('|');
     if (existing.has(fp)) { stats.skipped++; continue; }
     const values = remapPK(baseDb, baseTOrig, colNames, pkCol, rowObj);
@@ -2564,9 +2711,79 @@ function updateStats(stats, tl, added) {
   else stats.other += added;
 }
 
+// ── VERIFICA DEL RISULTATO CONTRO I FILE DI PARTENZA ────
+function verifyAgainstSources(resDb, result) {
+  const q = (db, sql) => { const r = db.exec(sql); return r.length ? r[0].values : []; };
+  const COLORS = { 1:'giallo', 2:'verde', 3:'blu', 4:'rosa', 5:'arancione', 6:'viola' };
+  const srcDbs = state.files.map(f => new state.SQL.Database(f.dbBytes));
+  try {
+    // 1) integrità SQLite
+    const ic = q(resDb, 'PRAGMA integrity_check')[0]?.[0];
+    if (ic === 'ok') result.info.push('Integrità SQLite ✓');
+    else { result.warnings.push('Controllo di integrità SQLite: ' + ic); result.ok = false; }
+
+    // 2) evidenziazioni: nessun GUID dei file di partenza deve mancare
+    const umR = findTableCI(resDb, 'usermark');
+    if (umR) {
+      const have = new Set(q(resDb, `SELECT UserMarkGuid FROM "${umR}"`).map(r => r[0]));
+      const all = new Set();
+      srcDbs.forEach(d => { const t = findTableCI(d, 'usermark'); if (t) q(d, `SELECT UserMarkGuid FROM "${t}"`).forEach(r => all.add(r[0])); });
+      const missing = [...all].filter(g => !have.has(g)).length;
+      if (missing > 0) { result.warnings.push(`${missing} evidenziazioni dei file di partenza mancano nel risultato`); result.ok = false; }
+      else result.info.push(`Evidenziazioni: tutte le ${all.size} dei file di partenza presenti ✓`);
+    }
+
+    // 3) note: nessuna mancante e nessuna rimasta con una versione più vecchia di quella dei file
+    const nR = findTableCI(resDb, 'note');
+    if (nR) {
+      const res = new Map(q(resDb, `SELECT Guid, Title, Content, LastModified FROM "${nR}" WHERE Guid IS NOT NULL`).map(r => [r[0], r]));
+      const newest = new Map();
+      srcDbs.forEach(d => {
+        const t = findTableCI(d, 'note');
+        if (t) q(d, `SELECT Guid, Title, Content, LastModified FROM "${t}" WHERE Guid IS NOT NULL`).forEach(r => {
+          const cur = newest.get(r[0]);
+          if (!cur || String(r[3] || '') > String(cur[3] || '')) newest.set(r[0], r);
+        });
+      });
+      // scelte esplicite dell'utente diverse dal predefinito: non vanno segnalate
+      const chosenByUser = new Set((state.conflicts || []).filter(c => c.chosen !== c.defaultChosen).map(c => c.guid));
+      let missingN = 0, olderN = 0;
+      newest.forEach((r, g) => {
+        const got = res.get(g);
+        if (!got) { missingN++; return; }
+        if (chosenByUser.has(g)) return;
+        if (String(got[3] || '') < String(r[3] || '')) olderN++;
+      });
+      if (missingN > 0) { result.warnings.push(`${missingN} note dei file di partenza mancano nel risultato`); result.ok = false; }
+      if (olderN > 0) { result.warnings.push(`${olderN} note nel risultato hanno una versione più vecchia di quella presente nei file di partenza`); result.ok = false; }
+      if (!missingN && !olderN) result.info.push(`Note: tutte le ${newest.size} presenti, nella versione più recente ✓`);
+    }
+
+    // 4) playlist: elementi con più di un file collegato (non normale)
+    const mR = findTableCI(resDb, 'playlistitemindependentmediamap');
+    if (mR) {
+      const multi = d => { const t = findTableCI(d, 'playlistitemindependentmediamap'); return t ? q(d, `SELECT COUNT(*) FROM (SELECT PlaylistItemId FROM "${t}" GROUP BY PlaylistItemId HAVING COUNT(*) > 1)`)[0][0] : 0; };
+      const mr = multi(resDb);
+      const ms = Math.max(0, ...srcDbs.map(multi));
+      if (mr > 0) result.notices.push(`Playlist: ${mr} elementi hanno più di un file collegato (nei file di partenza: fino a ${ms}). Di solito è un residuo di unioni precedenti.`);
+      else result.info.push('Playlist: ogni elemento ha al massimo un file collegato ✓');
+    }
+
+    // 5) segnalazioni raccolte durante l'unione
+    if (mergeReport.markColor.length > 0) {
+      const ex = mergeReport.markColor.slice(0, 5).map(m => `${m.guid.slice(0, 8)} (${COLORS[m.base] || m.base} → ${COLORS[m.src] || m.src})`).join(', ');
+      result.notices.push(`${mergeReport.markColor.length} evidenziazioni hanno colore diverso tra i file; è stato tenuto quello del primo file. Esempi: ${ex}`);
+    }
+    if (mergeReport.markPub.size > 0)
+      result.notices.push(`${mergeReport.markPub.size} evidenziazioni puntavano a pubblicazioni diverse tra i file (es. rivista e edizione “es26”); risolte per maggioranza dei file.`);
+  } finally {
+    srcDbs.forEach(d => { try { d.close(); } catch(e) {} });
+  }
+}
+
 // ── VALIDAZIONE OUTPUT ──────────────────────────────────
 async function validateMergedOutput(bytes) {
-  const result = { ok: true, warnings: [], info: [] };
+  const result = { ok: true, warnings: [], info: [], notices: [] };
   try {
     // Apri ZIP
     const zip = await JSZip.loadAsync(bytes);
@@ -2648,6 +2865,9 @@ async function validateMergedOutput(bytes) {
       }
     } catch(e) { /* tabelle assenti, non un errore */ }
 
+    try { verifyAgainstSources(db, result); }
+    catch(e) { result.info.push('Verifica contro i file di partenza non riuscita: ' + e.message); }
+
     db.close();
   } catch(e) {
     result.warnings.push('Errore durante la validazione: ' + e.message);
@@ -2681,10 +2901,13 @@ function showResult() {
   const vEl = $('validation-badge');
   if (vEl && v) {
     if (v.ok) {
-      vEl.innerHTML = '<span class="badge-ok">✅ File verificato — nessun problema</span>';
+      const nt = (v.notices || []).map(w => `<li>${escHtml(w)}</li>`).join('');
+      vEl.innerHTML = '<span class="badge-ok">✅ File verificato — nessun dato perso</span>' +
+        (nt ? `<ul class="val-warnings" style="margin-top:8px">${nt}</ul>` : '');
     } else {
       const msgs = v.warnings.map(w => `<li>${escHtml(w)}</li>`).join('');
-      vEl.innerHTML = `<span class="badge-warn">⚠️ Avvisi sul file generato</span><ul class="val-warnings">${msgs}</ul>`;
+      const nt2 = (v.notices || []).map(w => `<li>${escHtml(w)}</li>`).join('');
+      vEl.innerHTML = `<span class="badge-warn">⚠️ Avvisi sul file generato</span><ul class="val-warnings">${msgs}${nt2}</ul>`;
     }
     vEl.style.display = '';
   }
@@ -2875,4 +3098,3 @@ $('debug-close').addEventListener('click', () => {
 </script>
 </body>
 </html>
-                                                                                                                                                                                  
